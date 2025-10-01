@@ -1,0 +1,63 @@
+version: '3.6'
+services:
+  iris:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    restart: always
+    command: --check-caps false --ISCAgent false
+    # entrypoint: [ "/iris-main" ]
+    
+
+
+    ports:
+      # - 1972
+      # - 9092:52773
+      # - 53773
+      - 1972:1972 
+      - 52773:52773
+    # volumes:
+    #   - ./:/home/irisowner/dev
+    #   - ./workspace:/home/jovyan/workspace 
+    #   - ./workspace/CSV:/app/CSV
+    #   - ./workspace/flask/data:/app/data
+    
+    # environment:
+    #   IRIS_USERNAME: demo
+    #   IRIS_PASSWORD: demo
+
+
+    # environment:
+    #   IRISINSTALLDIR: "/opt/intersystems/iris"  # Set this to your IRIS directory path
+    #   IRISUSERNAME: "_SYSTEM"
+    #   IRISPASSWORD: "demo"
+    #   IRISNAMESPACE: "USER"
+    #   PYTHON_PATH: "/usr/irissys/bin/"
+    #   PATH: "/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin"
+      
+  flask:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: flask
+    restart: always
+    ports:
+      - "8000:8000" 
+    volumes:
+      - ./app:/app
+      - ./data:/data:ro        # mount data separately
+
+    environment:
+      IRIS_HOST: iris
+      IRIS_PORT: "1972"
+      IRIS_NAMESPACE: USER
+      IRIS_USER: _SYSTEM
+      IRIS_PASSWORD: SYS
+      PAPERS_CSV: /data/papers.csv
+      RELATIONS_CSV: /data/relations.csv
+    depends_on:
+      - iris
+    # command: >
+    #     sh -c "python data_load.py &&
+    #     python app.py"

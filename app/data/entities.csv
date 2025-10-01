@@ -1,0 +1,1517 @@
+docid,entityid,type
+0,When To Use Graphs In Rag: A Comprehensive Analysis For Graph Retrieval-Augmented Generation,Paper
+0,Zhishang Xiang,Author
+0,Chuanjie Wu,Author
+0,Qinggang Zhang,Author
+0,Shengyuan Chen,Author
+0,Zijin Hong,Author
+0,Xiao Huang,Author
+0,Jinsong Su,Author
+0,Graphrag,Topic
+0,Rag,Topic
+0,Graphrag-Bench,Topic
+0,Large Language Models,Topic
+0,External Knowledge,Topic
+0,Graphs,Topic
+0,Hierarchical Structure,Topic
+0,Hierarchical Knowledge Retrieval,Topic
+0,Deep Contextual Reasoning,Topic
+0,Fact Retrieval,Topic
+0,Complex Reasoning,Topic
+0,Contextual Summarization,Topic
+0,Creative Generation,Topic
+0,Graph Construction,Topic
+0,Knowledge Retrieval,Topic
+0,Final Generation,Topic
+0,Accurate Reasoning,Topic
+1,"Benchmarking Vector, Graph And Hybrid Retrieval Augmented Generation (Rag) Pipelines For Open Radio Access Networks (Oran)",Paper
+1,Sarat Ahmad,Author
+1,Zeinab Nezami,Author
+1,Maryam Hafeez,Author
+1,Syed Ali Raza Zaidi,Author
+1,Generative Ai,Topic
+1,Autonomous Optimization,Topic
+1,Wireless Networks,Topic
+1,Open Radio Access Networks,Topic
+1,Oran Architecture,Topic
+1,Ran Intelligent Controller,Topic
+1,Api Definitions,Topic
+1,Xapps,Topic
+1,Rapps,Topic
+1,Large Language Models,Topic
+1,Fine-Tuning,Topic
+1,Telecom-Specific Tasks,Topic
+1,Retrieval-Augmented Generation,Topic
+1,Vector Rag,Topic
+1,Graphrag,Topic
+1,Hybrid Graphrag,Topic
+1,In-Context Learning,Topic
+1,Domain Adaptation,Topic
+1,Knowledge Graphs,Topic
+1,Dual Retrieval Strategies,Topic
+1,Multi-Hop Reasoning,Topic
+1,Factual Grounding,Topic
+1,Evaluation,Topic
+1,Oran Specifications,Topic
+1,Vector-Based Retrieval,Topic
+1,Faithfulness,Topic
+1,Answer Relevance,Topic
+1,Context Relevance,Topic
+1,Factual Correctness,Topic
+2,Graph-R1: Towards Agentic Graphrag Framework Via End-To-End Reinforcement Learning,Paper
+2,Haoran Luo,Author
+2,Haihong E,Author
+2,Guanting Chen,Author
+2,Qika Lin,Author
+2,Yikai Guo,Author
+2,Fangzhi Xu,Author
+2,Zemin Kuang,Author
+2,Meina Song,Author
+2,Xiaobao Wu,Author
+2,Yifan Zhu,Author
+2,Luu Anh Tuan,Author
+2,Retrieval-Augmented Generation (Rag),Topic
+2,Graphrag,Topic
+2,Graph-R1,Topic
+2,End-To-End Reinforcement Learning,Topic
+2,Lightweight Knowledge Hypergraph Construction,Topic
+2,Entity-Relation Graphs,Topic
+2,Chunk-Based Retrieval,Topic
+2,Structural Semantics,Topic
+2,External Knowledge,Topic
+2,Hallucination In Llms,Topic
+2,Llms,Topic
+2,Long-Context Reasoning,Topic
+2,Prompt Design,Topic
+2,Multi-Turn Agent-Environment Interaction,Topic
+2,End-To-End Reward Mechanism,Topic
+2,Reasoning Accuracy,Topic
+2,Retrieval Efficiency,Topic
+2,Generation Quality,Topic
+2,Rag Datasets,Topic
+2,High Construction Cost,Topic
+2,Fixed One-Time Retrieval,Topic
+2,Agentic Graphrag Framework,Topic
+2,Agent Process,Topic
+3,Rag Vs. Graphrag: A Systematic Evaluation And Key Insights,Paper
+3,Haoyu Han,Author
+3,Harry Shomer,Author
+3,Yu Wang,Author
+3,Yongjia Lei,Author
+3,Kai Guo,Author
+3,Zhigang Hua,Author
+3,Bo Long,Author
+3,Hui Liu,Author
+3,Jiliang Tang,Author
+3,Retrieval-Augmented Generation (Rag),Topic
+3,Graphrag,Topic
+3,Llms,Topic
+3,Text-Based Data,Topic
+3,Structured Data,Topic
+3,Knowledge Graphs,Topic
+3,Implicit Knowledge,Topic
+3,Graph Data,Topic
+3,Question Answering,Topic
+3,Query-Based Summarization,Topic
+3,Text-Based Benchmarks,Topic
+3,Systematic Evaluation,Topic
+3,Shortcomings Of Current Graphrag Approaches,Topic
+3,Future Research,Topic
+3,Strategies To Integrate Their Strengths,Topic
+3,Downstream Tasks,Topic
+4,Empowering Graphrag With Knowledge Filtering And Integration,Paper
+4,Kai Guo,Author
+4,Harry Shomer,Author
+4,Shenglai Zeng,Author
+4,Haoyu Han,Author
+4,Yu Wang,Author
+4,Jiliang Tang,Author
+4,Large Language Models,Topic
+4,Natural Language Processing,Topic
+4,Graphrag,Topic
+4,Graphrag-Fi,Topic
+4,Graphrag-Filtering,Topic
+4,Graphrag-Integration,Topic
+4,Two-Stage Filtering Mechanism,Topic
+4,Logits-Based Selection Strategy,Topic
+4,External Graphs,Topic
+4,Knowledge Gaps,Topic
+4,Hallucinations,Topic
+4,Retrieval-Augmented Generation,Topic
+4,Intrinsic Reasoning,Topic
+4,Knowledge Graph Qa Tasks,Topic
+4,Noisy And Irrelevant Information,Topic
+4,External Knowledge,Topic
+4,Excessive Reliance On External Knowledge,Topic
+5,Inference Scaled Graphrag: Improving Multi Hop Question Answering On Knowledge Graphs,Paper
+5,Travis Thompson,Author
+5,Seung-Hwan Lim,Author
+5,Paul Liu,Author
+5,Ruoying He,Author
+5,Dongkuan Xu,Author
+5,Large Language Models (Llms),Topic
+5,Language Understanding And Generation,Topic
+5,Knowledge-Intensive Reasoning Tasks,Topic
+5,Structured Context,Topic
+5,Multi-Hop Information,Topic
+5,Retrieval-Augmented Generation (Rag),Topic
+5,Graphrag,Topic
+5,Knowledge Graphs,Topic
+5,Inference-Scaled Graphrag,Topic
+5,Inference-Time Compute Scaling,Topic
+5,Sequential Scaling,Topic
+5,Deep Chain-Of-Thought Graph Traversal,Topic
+5,Parallel Scaling,Topic
+5,Majority Voting,Topic
+5,Interleaved Reasoning-Execution Loop,Topic
+5,Grbench Benchmark,Topic
+5,Multi-Hop Question Answering,Topic
+5,Graph Traversal Baselines,Topic
+5,Structured Knowledge Reasoning,Topic
+6,T-Grag: A Dynamic Graphrag Framework For Resolving Temporal Conflicts And Redundancy In Knowledge Retrieval,Paper
+6,Dong Li,Author
+6,Yichen Niu,Author
+6,Ying Ai,Author
+6,Xiang Zou,Author
+6,Biqing Qi,Author
+6,Jianxing Liu,Author
+6,Large Language Models (Llms),Topic
+6,Natural Language Generation,Topic
+6,Knowledge-Intensive Tasks,Topic
+6,Outdated Or Incomplete Internal Knowledge,Topic
+6,Retrieval-Augmented Generation (Rag),Topic
+6,External Retrieval,Topic
+6,Graphrag,Topic
+6,Knowledge Graphs,Topic
+6,Multi-Hop Reasoning,Topic
+6,Temporal Dynamics Of Knowledge,Topic
+6,Temporal Ambiguity,Topic
+6,Time-Insensitive Retrieval,Topic
+6,Semantic Redundancy,Topic
+6,Temporal Graphrag (T-Grag),Topic
+6,Temporal Knowledge Graph Generator,Topic
+6,Temporal Query Decomposition,Topic
+6,Three-Layer Interactive Retriever,Topic
+6,Source Text Extractor,Topic
+6,Llm-Based Generator,Topic
+6,"Time-Stamped, Evolving Graph Structures",Topic
+6,Temporal Queries,Topic
+6,Temporal Subgraphs,Topic
+6,Noise,Topic
+6,Contextually And Temporally Accurate Responses,Topic
+6,Time-Longqa,Topic
+6,Benchmark Dataset,Topic
+6,Corporate Annual Reports,Topic
+6,Temporal Reasoning,Topic
+6,Evolving Knowledge,Topic
+6,Retrieval Accuracy,Topic
+6,Response Relevance,Topic
+6,Temporal Constraints,Topic
+6,Knowledge Evolution,Topic
+6,Long-Text Question Answering,Topic
+6,Temporal Conflicts,Topic
+6,Redundancy In Knowledge Retrieval,Topic
+6,Dynamic Graphrag Framework,Topic
+7,A Survey Of Graph Retrieval-Augmented Generation For Customized Large Language Models,Paper
+7,Qinggang Zhang,Author
+7,Shengyuan Chen,Author
+7,Yuanchen Bei,Author
+7,Zheng Yuan,Author
+7,Huachi Zhou,Author
+7,Zijin Hong,Author
+7,Hao Chen,Author
+7,Yilin Xiao,Author
+7,Chuang Zhou,Author
+7,Yi Chang,Author
+7,Xiao Huang,Author
+7,Large Language Models (Llms),Topic
+7,Specialized Domains,Topic
+7,Retrieval-Augmented Generation (Rag),Topic
+7,Graph-Based Retrieval-Augmented Generation (Graphrag),Topic
+7,Professional Fields,Topic
+7,Professional Domains,Topic
+7,Complex Query Understanding In Professional Contexts,Topic
+7,Knowledge Integration Across Distributed Sources,Topic
+7,System Efficiency Bottlenecks At Scale,Topic
+7,Graph-Structured Knowledge Representation,Topic
+7,Entity Relationships,Topic
+7,Domain Hierarchies,Topic
+7,Graph-Based Retrieval Techniques,Topic
+7,Context-Preserving Knowledge Retrieval,Topic
+7,Multihop Reasoning Ability,Topic
+7,Structure-Aware Knowledge Integration Algorithms,Topic
+7,Accurate And Logical Coherent Generation Of Llms,Topic
+7,Domain-Specific Llm Applications,Topic
+7,Technical Challenges,Topic
+7,Research Directions,Topic
+7,Awesome-Graphrag,Topic
+7,Research Papers,Topic
+7,Open-Source Data,Topic
+7,Projects,Topic
+8,Conversational Intent-Driven Graphrag: Enhancing Multi-Turn Dialogue Systems Through Adaptive Dual-Retrieval Of Flow Patterns And Context Semantics,Paper
+8,Ziqi Zhu,Author
+8,Tao Hu,Author
+8,Honglong Zhang,Author
+8,Dan Yang,Author
+8,Hangeng Chen,Author
+8,Mengran Zhang,Author
+8,Xilun Chen,Author
+8,Cid-Graphrag,Topic
+8,Conversation Rag,Topic
+8,Graphrag,Topic
+8,Intent Transition Graphs,Topic
+8,Dynamic Intent Transition Graphs,Topic
+8,Dual-Retrieval Mechanism,Topic
+8,Semantic Search,Topic
+8,Intent-Based Graph Traversal,Topic
+8,Semantic Similarity,Topic
+8,Contextual Coherence,Topic
+8,Goal-Oriented Progression,Topic
+8,Multi-Turn Customer Service Conversations,Topic
+8,Real-World Customer Service Dialogues,Topic
+8,Retrieval Quality,Topic
+8,Response Quality,Topic
+8,Automatic Metrics,Topic
+8,Llm-As-Judge,Topic
+8,Bleu,Topic
+8,Rouge-L,Topic
+8,Meteor,Topic
+8,Intent Transition Structures,Topic
+8,Semantic Retrieval,Topic
+8,Knowledge Graphs,Topic
+8,Multi-Turn Dialogues,Topic
+8,Evaluation Criteria,Topic
+8,Goal Achieved Historical Dialogues,Topic
+8,Intent Flow Patterns,Topic
+8,Contextual Semantics,Topic
+8,Knowledge-Intensive Multi-Turn Dialogues,Topic
+9,Efficient Knowledge Graph Construction And Retrieval From Unstructured Text For Large-Scale Rag Systems,Paper
+9,Congmin Min,Author
+9,Rhea Mathew,Author
+9,Joyce Pan,Author
+9,Sahil Bansal,Author
+9,Abbas Keshavarzi,Author
+9,Amar Viswanathan Kannan,Author
+9,Graphrag,Topic
+9,Retrieval Augmented Generation,Topic
+9,Enterprise Environments,Topic
+9,Multi-Hop Reasoning,Topic
+9,Structured Retrieval,Topic
+9,Knowledge Graphs,Topic
+9,Large Language Models,Topic
+9,Graph-Based Retrieval,Topic
+9,Dependency-Based Knowledge Graph Construction,Topic
+9,Industrial-Grade Nlp Libraries,Topic
+9,Unstructured Text,Topic
+9,Lightweight Graph Retrieval,Topic
+9,Hybrid Query Node Identification,Topic
+9,One-Hop Traversal,Topic
+9,Recall,Topic
+9,Latency,Topic
+9,Subgraph Extraction,Topic
+9,Sap Datasets,Topic
+9,Legacy Code Migration,Topic
+9,Rag Baselines,Topic
+9,Llm-As-Judge,Topic
+9,Ragas,Topic
+9,Llm-Generated Knowledge Graphs,Topic
+9,Cost,Topic
+9,Scalability,Topic
+9,Real-World Large-Scale Enterprise Applications,Topic
+9,Retrieval-Augmented Reasoning,Topic
+9,Explainable,Topic
+9,Domain-Adaptable,Topic
+10,Gfm-Rag: Graph Foundation Model For Retrieval Augmented Generation,Paper
+10,Linhao Luo,Author
+10,Zicheng Zhao,Author
+10,Gholamreza Haffari,Author
+10,Dinh Phung,Author
+10,Chen Gong,Author
+10,Shirui Pan,Author
+10,Retrieval-Augmented Generation,Topic
+10,Large Language Models,Topic
+10,Graphrag,Topic
+10,Gfm-Rag,Topic
+10,Graph Foundation Model,Topic
+10,Graph Neural Network,Topic
+10,Knowledge Graphs,Topic
+10,Multi-Hop Qa,Topic
+10,Domain-Specific Rag Datasets,Topic
+10,Neural Scaling Laws,Topic
+10,Retrieval,Topic
+10,Graph Structure,Topic
+10,Two-Stage Training,Topic
+10,Large-Scale Datasets,Topic
+10,Unseen Datasets,Topic
+10,State-Of-The-Art Performance,Topic
+10,Generalizability,Topic
+10,Efficiency,Topic
+10,Noise And Incompleteness,Topic
+11,Rakg: Document-Level Retrieval Augmented Knowledge Graph Construction,Paper
+11,Hairong Zhang,Author
+11,Jiaheng Si,Author
+11,Guohang Yan,Author
+11,Boyuan Qi,Author
+11,Pinlong Cai,Author
+11,Song Mao,Author
+11,Ding Wang,Author
+11,Botian Shi,Author
+11,Knowledge Graphs,Topic
+11,Retrieval-Augmented Generation (Rag),Topic
+11,Graphrag,Topic
+11,Pike-Rag,Topic
+11,Large Language Models (Llms),Topic
+11,Knowledge Graph Construction (Kgc),Topic
+11,Entity Disambiguation,Topic
+11,Schema Definition,Topic
+11,Cross-Document Knowledge Integration,Topic
+11,Automatic Document-Level Knowledge Graph Construction,Topic
+11,Rakg Framework,Topic
+11,Pre-Entities,Topic
+11,Text Chunks,Topic
+11,Long-Context Forgetting,Topic
+11,Coreference Resolution,Topic
+11,Global Information,Topic
+11,Interconnections Among Disparate Nodes,Topic
+11,Rag Evaluation Framework,Topic
+11,Hallucinations In Llms,Topic
+11,Mine Dataset,Topic
+12,Xgraphrag: Interactive Visual Analysis For Graph-Based Retrieval-Augmented Generation,Paper
+12,Ke Wang,Author
+12,Bo Pan,Author
+12,Yingchaojie Feng,Author
+12,Yuwei Wu,Author
+12,Jieyi Chen,Author
+12,Minfeng Zhu,Author
+12,Wei Chen,Author
+12,Graph-Based Retrieval-Augmented Generation,Topic
+12,Retrieval-Augmented Generation,Topic
+12,Large Language Model,Topic
+12,Graphrag,Topic
+12,Visual Analysis Framework,Topic
+12,Xgraphrag,Topic
+12,Interactive Visualizations,Topic
+12,Interpretability,Topic
+12,Accessibility,Topic
+12,External Knowledge Base,Topic
+12,Failure Cases,Topic
+12,Improvement Opportunities,Topic
+12,Effectiveness,Topic
+12,Usability,Topic
+12,Open-Sourced,Topic
+12,Github,Topic
+13,Graphraft: Retrieval Augmented Fine-Tuning For Knowledge Graphs On Graph Databases,Paper
+13,Alfred Clemedtson,Author
+13,Borun Shi,Author
+13,Large Language Models,Topic
+13,Hallucination,Topic
+13,Private Data,Topic
+13,Retrieval-Augmented Generation,Topic
+13,Graphrag,Topic
+13,Knowledge Graphs,Topic
+13,Graph Databases,Topic
+13,Graph Query Languages,Topic
+13,Graphraft,Topic
+13,Retrieve-And-Reason Framework,Topic
+13,Finetunes Llms,Topic
+13,Cypher Queries,Topic
+13,Subgraph Contexts,Topic
+13,Accurate Answers,Topic
+13,Off-The-Shelf Solution,Topic
+13,Native Graph Dbs,Topic
+13,Benchmarks,Topic
+13,Sample-Efficient,Topic
+13,Training Data,Topic
+13,State-Of-The-Art Models,Topic
+13,Four Standard Metrics,Topic
+13,Q&As,Topic
+13,Large Text-Attributed Kgs,Topic
+13,Entities Multiple Hops Away,Topic
+14,Graphrag-Bench: Challenging Domain-Specific Reasoning For Evaluating Graph Retrieval-Augmented Generation,Paper
+14,Yilin Xiao,Author
+14,Junnan Dong,Author
+14,Chuang Zhou,Author
+14,Su Dong,Author
+14,Qian-Wen Zhang,Author
+14,Di Yin,Author
+14,Xing Sun,Author
+14,Xiao Huang,Author
+14,Graph Retrieval Augmented Generation (Graphrag),Topic
+14,Large Language Models,Topic
+14,Domain-Specific Corpora,Topic
+14,Complex Reasoning,Topic
+14,Question-Answering Datasets,Topic
+14,Evaluation Metrics,Topic
+14,Graphrag Models,Topic
+14,Graphrag-Bench,Topic
+14,Challenging Question Design,Topic
+14,Diverse Task Coverage,Topic
+14,Holistic Evaluation Framework,Topic
+14,College-Level Questions,Topic
+14,Domain-Specific Questions,Topic
+14,Multi-Hop Reasoning,Topic
+14,Mathematical Reasoning,Topic
+14,Programming,Topic
+14,Reasoning Tasks,Topic
+14,Multiple-Choice,Topic
+14,True/False,Topic
+14,Multi-Select,Topic
+14,Open-Ended,Topic
+14,Fill-In-The-Blank,Topic
+14,16 Disciplines,Topic
+14,20 Core Textbooks,Topic
+14,Graphrag Pipeline,Topic
+14,Graph Construction,Topic
+14,Knowledge Retrieval,Topic
+14,Answer Generation,Topic
+14,Final-Answer Correctness,Topic
+14,Logical Coherence,Topic
+14,Reasoning Process,Topic
+14,Graph-Based Structuring,Topic
+14,Graph Architectures,Topic
+14,Retrieval Efficacy,Topic
+14,Reasoning Capabilities,Topic
+14,Nine Contemporary Graphrag Methods,Topic
+15,Fg-Rag: Enhancing Query-Focused Summarization With Context-Aware Fine-Grained Graph Rag,Paper
+15,Yubin Hong,Author
+15,Chaofan Li,Author
+15,Jingyi Zhang,Author
+15,Yingxia Shao,Author
+15,Retrieval-Augmented Generation (Rag),Topic
+15,Large Language Models,Topic
+15,External Knowledge,Topic
+15,Query-Focused Summarization (Qfs),Topic
+15,Graphrag,Topic
+15,Context-Aware Fine-Grained Graph Rag (Fg-Rag),Topic
+15,Context-Aware Entity Expansion,Topic
+15,Graph Retrieval,Topic
+15,Query-Level Fine-Grained Summarization,Topic
+15,Query Awareness,Topic
+15,Comprehensiveness,Topic
+15,Diversity,Topic
+15,Empowerment,Topic
+16,Byokg-Rag: Multi-Strategy Graph Retrieval For Knowledge Graph Question Answering,Paper
+16,Costas Mavromatis,Author
+16,Soji Adeshina,Author
+16,Vassilis N. Ioannidis,Author
+16,Zhen Han,Author
+16,Qi Zhu,Author
+16,Ian Robinson,Author
+16,Bryan Thompson,Author
+16,Huzefa Rangwala,Author
+16,George Karypis,Author
+16,Knowledge Graph Question Answering,Topic
+16,Large Language Model,Topic
+16,Llm Agents,Topic
+16,Graph Traversal,Topic
+16,Graph Retrieval,Topic
+16,Entity Linking,Topic
+16,Custom Kgs,Topic
+16,Byokg-Rag,Topic
+16,Graph Tools,Topic
+16,Opencypher Queries,Topic
+16,Reasoning Paths,Topic
+16,Graph Context,Topic
+16,Generalization,Topic
+16,Benchmarks,Topic
+16,Knowledge Graph,Topic
+16,Candidate Answers,Topic
+16,Question Entities,Topic
+17,Graphrag Under Fire,Paper
+17,Jiacheng Liang,Author
+17,Yuhui Wang,Author
+17,Changjiang Li,Author
+17,Rongyi Zhu,Author
+17,Tanqiu Jiang,Author
+17,Neil Gong,Author
+17,Ting Wang,Author
+17,Graphrag,Topic
+17,Rag,Topic
+17,Retrieval-Augmented Generation,Topic
+17,Knowledge Graph,Topic
+17,Multi-Scale Knowledge Graphs,Topic
+17,Security,Topic
+17,Poisoning Attacks,Topic
+17,Rag Poisoning Attacks,Topic
+17,Graph-Based Indexing,Topic
+17,Retrieval,Topic
+17,Attack Surfaces,Topic
+17,Gragpoison,Topic
+17,Relation Injection,Topic
+17,Relation Enhancement,Topic
+17,Narrative Generation,Topic
+17,Datasets,Topic
+17,Models,Topic
+17,Effectiveness,Topic
+17,Scalability,Topic
+17,Defensive Measures,Topic
+17,Future Research,Topic
+17,Success Rate,Topic
+17,Poisoning Text,Topic
+17,Shared Relations,Topic
+17,Multiple Queries,Topic
+17,Malicious Content,Topic
+18,Graph Retrieval-Augmented Generation: A Survey,Paper
+18,Boci Peng,Author
+18,Yun Zhu,Author
+18,Yongchao Liu,Author
+18,Xiaohe Bo,Author
+18,Haizhou Shi,Author
+18,Chuntao Hong,Author
+18,Yan Zhang,Author
+18,Siliang Tang,Author
+18,Retrieval-Augmented Generation,Topic
+18,Large Language Models,Topic
+18,External Knowledge Base,Topic
+18,Hallucination,Topic
+18,Lack Of Domain-Specific Knowledge,Topic
+18,Outdated Information,Topic
+18,Databases,Topic
+18,Graph Retrieval-Augmented Generation,Topic
+18,Relational Knowledge,Topic
+18,Context-Aware Responses,Topic
+18,Graph-Based Indexing,Topic
+18,Graph-Guided Retrieval,Topic
+18,Graph-Enhanced Generation,Topic
+18,Downstream Tasks,Topic
+18,Application Domains,Topic
+18,Evaluation Methodologies,Topic
+18,Industrial Use Cases,Topic
+18,Training Methods,Topic
+18,Core Technologies,Topic
+18,Survey,Topic
+19,Retrieval-Augmented Generation With Graphs (Graphrag),Paper
+19,Haoyu Han,Author
+19,Yu Wang,Author
+19,Harry Shomer,Author
+19,Kai Guo,Author
+19,Jiayuan Ding,Author
+19,Yongjia Lei,Author
+19,Mahantesh Halappanavar,Author
+19,Ryan A. Rossi,Author
+19,Subhabrata Mukherjee,Author
+19,Xianfeng Tang,Author
+19,Qi He,Author
+19,Zhigang Hua,Author
+19,Bo Long,Author
+19,Tong Zhao,Author
+19,Neil Shah,Author
+19,Amin Javari,Author
+19,Yinglong Xia,Author
+19,Jiliang Tang,Author
+19,Retrieval-Augmented Generation (Rag),Topic
+19,Graph,Topic
+19,Graphrag,Topic
+19,Graph-Structured Data,Topic
+19,Relational Knowledge,Topic
+19,Holistic Graphrag Framework,Topic
+19,Query Processor,Topic
+19,Retriever,Topic
+19,Organizer,Topic
+19,Generator,Topic
+19,Data Source,Topic
+19,Research Challenges,Topic
+19,Cross-Disciplinary Opportunities,Topic
+19,Real-World Applications,Topic
+19,Neural-Embedding Space,Topic
+19,Domains,Topic
+19,Techniques,Topic
+19,External Data Sources,Topic
+19,Survey,Topic
+20,Lego-Graphrag: Modularizing Graph-Based Retrieval-Augmented Generation For Design Space Exploration,Paper
+20,Yukun Cao,Author
+20,Zengyi Gao,Author
+20,Zhiyang Li,Author
+20,Xike Xie,Author
+20,S. Kevin Zhou,Author
+20,Jianliang Xu,Author
+20,Graphrag,Topic
+20,Knowledge Graphs,Topic
+20,Large Language Models,Topic
+20,Lego-Graphrag,Topic
+20,Databases,Topic
+20,Natural Language Processing,Topic
+20,Modular Framework,Topic
+20,Retrieval-Augmented Generation,Topic
+20,Empirical Studies,Topic
+20,Design Space Exploration,Topic
+20,Reasoning Quality,Topic
+20,Runtime Efficiency,Topic
+20,Token Or Gpu Cost,Topic
+20,Modular Workflow Analysis,Topic
+20,Systematic Solution Frameworks,Topic
+20,Fine-Grained Decomposition,Topic
+20,Systematic Classification,Topic
+20,Creation Of New Graphrag Instances,Topic
+20,Large-Scale Real-World Graphs,Topic
+20,Diverse Query Sets,Topic
+20,Contextual Relevance,Topic
+20,Graphrag Workflow,Topic
+20,Existing Techniques,Topic
+20,Implemented Graphrag Instances,Topic
+20,Graphrag Instances,Topic
+20,Reasoning Accuracy,Topic
+21,"Generating Knowledge Graphs From Large Language Models: A Comparative Study Of Gpt-4, Llama 2, And Bert",Paper
+21,Ahan Bhatt,Author
+21,Nandan Vaghela,Author
+21,Kush Dudhia,Author
+21,Knowledge Graphs,Topic
+21,Graphrags,Topic
+21,Retrieval-Augmented Generative Systems (Rags),Topic
+21,Structured Reasoning,Topic
+21,Semantic Understanding,Topic
+21,Accuracy And Scalability Limitations,Topic
+21,Traditional Methods,Topic
+21,Large Language Models (Llms),Topic
+21,Gpt-4,Topic
+21,Llama 2 (13B),Topic
+21,Bert,Topic
+21,Unstructured Data,Topic
+21,Traditional Pipelines,Topic
+21,Precision,Topic
+21,Recall,Topic
+21,F1-Score,Topic
+21,Graph Edit Distance,Topic
+21,Semantic Similarity,Topic
+21,Semantic Fidelity,Topic
+21,Structural Accuracy,Topic
+21,"Lightweight, Domain-Specific Graphs",Topic
+21,Entity-Relationship Modeling,Topic
+21,Kg Creation,Topic
+21,Graphrag Accessibility,Topic
+21,Real-World Applications,Topic
+22,"Beyond Single Pass, Looping Through Time: Kg-Irag With Iterative Knowledge Retrieval",Paper
+22,Ruiyi Yang,Author
+22,Hao Xue,Author
+22,Imran Razzak,Author
+22,Hakim Hacid,Author
+22,Flora D. Salim,Author
+22,Graphrag,Topic
+22,Knowledge Graphs,Topic
+22,Large Language Models,Topic
+22,Rag,Topic
+22,Kg-Irag,Topic
+22,Iterative Reasoning,Topic
+22,Multi-Step Reasoning,Topic
+22,Temporal Dependencies,Topic
+22,Logical Dependencies,Topic
+22,External Knowledge Graphs,Topic
+22,Step-By-Step Reasoning,Topic
+22,Dynamic Temporal Data Extraction,Topic
+22,Weather Conditions,Topic
+22,Traffic Patterns,Topic
+22,Travel Times,Topic
+22,Complex Reasoning Tasks,Topic
+22,Logic-Based Retrieval,Topic
+22,Information Retrieval,Topic
+22,External Knowledge,Topic
+22,Weatherqa-Irish,Topic
+22,Weatherqa-Sydney,Topic
+22,Trafficqa-Tfnsw,Topic
+23,You Don'T Need Pre-Built Graphs For Rag: Retrieval Augmented Generation With Adaptive Reasoning Structures,Paper
+23,Shengyuan Chen,Author
+23,Chuang Zhou,Author
+23,Zheng Yuan,Author
+23,Qinggang Zhang,Author
+23,Zeyang Cui,Author
+23,Hao Chen,Author
+23,Yilin Xiao,Author
+23,Jiannong Cao,Author
+23,Xiao Huang,Author
+23,Large Language Models,Topic
+23,Hallucination,Topic
+23,Factually Incorrect Statements,Topic
+23,Retrieval-Augmented Generation,Topic
+23,Graph-Based Rag,Topic
+23,Logicrag,Topic
+23,Pre-Constructed Graphs,Topic
+23,Directed Acyclic Graph,Topic
+23,Topological Sort,Topic
+23,Graph Pruning,Topic
+23,Context Pruning,Topic
+23,Token Cost,Topic
+23,Knowledge Bases,Topic
+23,Multi-Step Reasoning,Topic
+23,Query Decomposition,Topic
+23,Adaptive Retrieval,Topic
+23,Inference Time,Topic
+23,Knowledge Retrieval,Topic
+23,Ineffective Knowledge Retrieval,Topic
+23,Update Latency,Topic
+23,Relational Connections,Topic
+23,Distributed Documents,Topic
+23,Complex Tasks,Topic
+23,Query-Relevant Contexts,Topic
+23,Llm Reasoning,Topic
+23,Performance,Topic
+23,Efficiency,Topic
+23,State-Of-The-Art Baselines,Topic
+23,Logical Dependencies,Topic
+23,Logic Structures,Topic
+23,Reasoning Structures,Topic
+24,Addressing Accuracy And Hallucination Of Llms In Alzheimer'S Disease Research Through Knowledge Graphs,Paper
+24,Tingxuan Xu,Author
+24,Jiarui Feng,Author
+24,Justin Melendez,Author
+24,Kaleigh Roberts,Author
+24,Donghong Cai,Author
+24,Mingfang Zhu,Author
+24,Donald Elbert,Author
+24,Yixin Chen,Author
+24,Randall J. Bateman,Author
+24,Large Language Model (Llm),Topic
+24,Chatbots,Topic
+24,Chatgpt,Topic
+24,Scientific Research,Topic
+24,Hallucinations,Topic
+24,Domain-Specific Knowledge,Topic
+24,Explainability,Topic
+24,Traceability,Topic
+24,Graphrag,Topic
+24,Retrieval-Augmented Generation (Rag),Topic
+24,Alzheimer'S Disease,Topic
+24,Alzheimer'S Disease Research,Topic
+24,Biomedical Domains,Topic
+24,Gpt-4O,Topic
+24,Knowledge Base,Topic
+24,Database,Topic
+24,Expert Questions,Topic
+24,Quality,Topic
+24,Interface,Topic
+24,Knowledge Graphs,Topic
+24,Contextual Information,Topic
+24,Accuracy,Topic
+25,Weak-To-Strong Graphrag: Aligning Weak Retrievers With Large Language Models For Graph-Based Retrieval Augmented Generation,Paper
+25,Deyu Zou,Author
+25,Yongqiang Chen,Author
+25,Mufei Li,Author
+25,Siqi Miao,Author
+25,Chenxi Liu,Author
+25,Bo Han,Author
+25,James Cheng,Author
+25,Pan Li,Author
+25,Graph-Based Retrieval-Augmented Generation (Rag),Topic
+25,Large Language Models (Llms),Topic
+25,Knowledge Graphs (Kgs),Topic
+25,Weak Retriever,Topic
+25,Weak Supervision,Topic
+25,Spurious Signals,Topic
+25,Refined Graph-Based Rag (Reg),Topic
+25,Llm Feedback,Topic
+25,Structure-Aware Reorganization Module,Topic
+25,Evidence Chains,Topic
+25,Prominent Benchmarks,Topic
+25,Llm Backbones,Topic
+25,Out-Of-Distribution Kgs,Topic
+25,Reasoning-Based Llms,Topic
+25,Reasoning Token Cost,Topic
+25,Performance,Topic
+25,State-Of-The-Art Performance,Topic
+26,Fusing Knowledge And Language: A Comparative Study Of Knowledge Graph-Based Question Answering With Llms,Paper
+26,Vaibhav Chaudhary,Author
+26,Neha Soni,Author
+26,Narotam Singh,Author
+26,Amita Kapoor,Author
+26,Knowledge Graphs,Topic
+26,Relational Triplets,Topic
+26,Knowledge Graph Triplets,Topic
+26,Question Answering,Topic
+26,Retrieval Augmented Generation,Topic
+26,Large Language Models,Topic
+26,Spacy,Topic
+26,Stanford Corenlp-Openie,Topic
+26,Graphrag,Topic
+26,Open Source Technologies,Topic
+26,Reasoning Abilities,Topic
+26,Llm-Based Question Answering,Topic
+27,When Graph Meets Retrieval Augmented Generation For Wireless Networks: A Tutorial And Case Study,Paper
+27,Yang Xiong,Author
+27,Ruichen Zhang,Author
+27,Yinqiu Liu,Author
+27,Dusit Niyato,Author
+27,Zehui Xiong,Author
+27,Ying-Chang Liang,Author
+27,Shiwen Mao,Author
+27,Next-Generation Networking Technologies,Topic
+27,Modern Communication Systems,Topic
+27,Network Optimizations,Topic
+27,Large Language Models (Llms),Topic
+27,Retrieval Augmented Generation (Rag),Topic
+27,Knowledge Graphs,Topic
+27,Intent-Driven Networks (Idns),Topic
+27,Spectrum Knowledge Maps,Topic
+27,Graphrag,Topic
+27,Channel Gain Prediction,Topic
+27,Robust Updates,Topic
+27,Mitigation Of Hallucination,Topic
+27,Enhanced Security Measures,Topic
+27,Wireless Networks,Topic
+27,Networking,Topic
+28,Aligning Llms For The Classroom With Knowledge-Based Retrieval -- A Comparative Rag Study,Paper
+28,Amay Jain,Author
+28,Liu Cui,Author
+28,Si Chen,Author
+28,Large Language Models,Topic
+28,Chatgpt,Topic
+28,Classrooms,Topic
+28,Outdated Or Fabricated Information,Topic
+28,Students,Topic
+28,Retrieval Augmented Generation (Rag),Topic
+28,External Resources,Topic
+28,Reliability,Topic
+28,Vector-Based Retrieval,Topic
+28,Graph-Based Retrieval,Topic
+28,Classroom Question Answering (Qa),Topic
+28,Pedagogical Factors,Topic
+28,Educational Disciplines,Topic
+28,Question Types,Topic
+28,Practical Deployment Costs,Topic
+28,Eduscopeqa,Topic
+28,Academic Subjects,Topic
+28,Educational Query Types,Topic
+28,Specific Facts,Topic
+28,Thematic Discussions,Topic
+28,Systematically Altered Textbooks,Topic
+28,Latent Knowledge,Topic
+28,Openai Vector Search Rag,Topic
+28,Low-Cost Generalist,Topic
+28,Quick Fact Retrieval,Topic
+28,Graphrag,Topic
+28,Graphrag Global,Topic
+28,Pedagogically Rich Answers,Topic
+28,Thematic Queries,Topic
+28,Graphrag Local,Topic
+28,"Dense, Altered Textbooks",Topic
+28,Corpus Integrity,Topic
+28,10-20X Higher Resource Usage,Topic
+28,Dynamic Branching Framework,Topic
+28,Fidelity,Topic
+28,Efficiency,Topic
+28,Educators,Topic
+28,System Designers,Topic
+28,Rag-Augmented Llms,Topic
+28,Learning Environments,Topic
+28,System Alignment,Topic
+29,E^2Graphrag: Streamlining Graph-Based Rag For High Efficiency And Effectiveness,Paper
+29,Yibo Zhao,Author
+29,Jiapeng Zhu,Author
+29,Ye Guo,Author
+29,Kangkang He,Author
+29,Xiang Li,Author
+29,E^2Graphrag,Topic
+29,Graph-Based Rag,Topic
+29,Graphrag,Topic
+29,Lightrag,Topic
+29,Hierarchical Entity Graphs,Topic
+29,Inefficiency,Topic
+29,Manually Pre-Defined Query Modes,Topic
+29,Summary Tree,Topic
+29,Large Language Models,Topic
+29,Entity Graph,Topic
+29,Spacy,Topic
+29,Document Chunks,Topic
+29,Bidirectional Indexes,Topic
+29,Entities,Topic
+29,Chunks,Topic
+29,Many-To-Many Relationships,Topic
+29,Local Retrieval,Topic
+29,Global Retrieval,Topic
+29,Adaptive Retrieval Strategy,Topic
+29,Graph Structure,Topic
+29,Indexing,Topic
+29,Retrieval,Topic
+29,Qa Performance,Topic
+29,Efficiency,Topic
+29,Effectiveness,Topic
+29,Knowledge Base,Topic
+30,Gtr: Graph-Table-Rag For Cross-Table Question Answering,Paper
+30,Jiaru Zou,Author
+30,Dongqi Fu,Author
+30,Sirui Chen,Author
+30,Xinrui He,Author
+30,Zihao Li,Author
+30,Yada Zhu,Author
+30,Jiawei Han,Author
+30,Jingrui He,Author
+30,Graphrag,Topic
+30,Cross-Table Question Answering,Topic
+30,Mutlitableqa,Topic
+30,Graph-Table-Rag,Topic
+30,Heterogeneous Graph,Topic
+30,Hierarchical Coarse-To-Fine Retrieval,Topic
+30,Graph-Aware Prompting,Topic
+30,Tabular Reasoning,Topic
+30,Llms,Topic
+30,Deployment Efficiency,Topic
+30,Multi-Table Benchmark,Topic
+30,Real-World Sources,Topic
+30,User Queries,Topic
+30,Tables,Topic
+30,Real-World Practical Applicability,Topic
+31,Open-Source Agentic Hybrid Rag Framework For Scientific Literature Review,Paper
+31,Aditya Nagori,Author
+31,Ricardo Accorsi Casonatto,Author
+31,Ayush Gautam,Author
+31,Abhinav Manikantha Sai Cheruvu,Author
+31,Rishikesan Kamaleswaran,Author
+31,Hybrid Retrieval Augmented Generation (Rag) Systems,Topic
+31,Graphrag,Topic
+31,Vectorrag,Topic
+31,Uncertainty Estimates,Topic
+31,Agentic Approach,Topic
+31,Autonomous Agent,Topic
+31,Instruction-Tuned Generation,Topic
+31,Uncertainty,Topic
+31,Neo4J,Topic
+31,Citation-Based Knowledge Graph (Kg),Topic
+31,Knowledge Graph (Kg),Topic
+31,Faiss,Topic
+31,Vector Store (Vs),Topic
+31,All-Minilm-L6-V2,Topic
+31,Llama-3.3-70B,Topic
+31,Pubmed,Topic
+31,Arxiv,Topic
+31,Google Scholar Apis,Topic
+31,Cypher,Topic
+31,Sparse Retrieval,Topic
+31,Dense Retrieval,Topic
+31,Re-Ranking,Topic
+31,Bootstrapped Evaluation,Topic
+31,Standard Deviation,Topic
+31,Evaluation Metrics,Topic
+31,Synthetic Benchmarks,Topic
+31,Real-World Queries,Topic
+31,Instruction-Tuned Agent,Topic
+31,Direct Preference Optimization (Dpo),Topic
+31,Vs Context Recall,Topic
+31,Context Precision,Topic
+31,Vs Faithfulness,Topic
+31,Vs Precision,Topic
+31,Kg Answer Relevance,Topic
+31,Faithfulness Score,Topic
+31,Kg Context Recall,Topic
+31,Vs Answer Relevance,Topic
+31,Precision,Topic
+31,Scientific Literature Review,Topic
+31,Bibliometric Open-Access Data,Topic
+31,Full-Text Pdfs,Topic
+31,Vector Search,Topic
+31,Graph Queries,Topic
+31,Dynamic Orchestration,Topic
+31,Reproducibility,Topic
+31,Hallucinations,Topic
+31,Relevance,Topic
+32,Hypergraphrag: Retrieval-Augmented Generation Via Hypergraph-Structured Knowledge Representation,Paper
+32,Haoran Luo,Author
+32,Haihong E,Author
+32,Guanting Chen,Author
+32,Yandan Zheng,Author
+32,Xiaobao Wu,Author
+32,Yikai Guo,Author
+32,Qika Lin,Author
+32,Yu Feng,Author
+32,Zemin Kuang,Author
+32,Meina Song,Author
+32,Yifan Zhu,Author
+32,Luu Anh Tuan,Author
+32,Retrieval-Augmented Generation,Topic
+32,Rag,Topic
+32,Graphrag,Topic
+32,Hypergraphrag,Topic
+32,Hypergraph,Topic
+32,Hyperedges,Topic
+32,Knowledge Hypergraph,Topic
+32,Knowledge Hypergraph Construction,Topic
+32,Retrieval,Topic
+32,Generation,Topic
+32,Chunk-Based Retrieval,Topic
+32,Graph-Based Knowledge Representation,Topic
+32,Binary Relations,Topic
+32,N-Ary Relations,Topic
+32,Ordinary Graph,Topic
+32,Standard Rag,Topic
+32,Graph-Based Rag,Topic
+32,Medicine,Topic
+32,Agriculture,Topic
+32,Computer Science,Topic
+32,Law,Topic
+32,Answer Accuracy,Topic
+32,Retrieval Efficiency,Topic
+32,Generation Quality,Topic
+32,Hypergraph-Structured Knowledge Representation,Topic
+33,From Local To Global: A Graph Rag Approach To Query-Focused Summarization,Paper
+33,Darren Edge,Author
+33,Ha Trinh,Author
+33,Newman Cheng,Author
+33,Joshua Bradley,Author
+33,Alex Chao,Author
+33,Apurva Mody,Author
+33,Steven Truitt,Author
+33,Dasha Metropolitansky,Author
+33,Robert Osazuwa Ness,Author
+33,Jonathan Larson,Author
+33,Retrieval-Augmented Generation (Rag),Topic
+33,Large Language Models (Llms),Topic
+33,External Knowledge Source,Topic
+33,Query-Focused Summarization (Qfs),Topic
+33,Graphrag,Topic
+33,Entity Knowledge Graph,Topic
+33,Community Summaries,Topic
+33,Graph Index,Topic
+33,Question Answering,Topic
+33,Private Text Corpora,Topic
+33,Global Questions,Topic
+33,Global Sensemaking Questions,Topic
+33,Conventional Rag Baseline,Topic
+33,1 Million Token Range,Topic
+33,Comprehensiveness Of Generated Answers,Topic
+33,Diversity Of Generated Answers,Topic
+33,Previously Unseen Document Collections,Topic
+34,Kerag_R: Knowledge-Enhanced Retrieval-Augmented Generation For Recommendation,Paper
+34,Zeyuan Meng,Author
+34,Zixuan Yi,Author
+34,Iadh Ounis,Author
+34,Large Language Models (Llms),Topic
+34,Recommender Systems,Topic
+34,Contextual Learning,Topic
+34,Generalisation Capabilities,Topic
+34,Recommendation Performance,Topic
+34,Domain-Specific Knowledge,Topic
+34,Knowledge Graph (Kg),Topic
+34,Graph Retrieval-Augmented Generation (Graphrag),Topic
+34,Retrieval-Augmented Generation,Topic
+34,Graph Attention Network (Gat),Topic
+34,Triple,Topic
+34,Text-Based User Interactions,Topic
+34,Users' Preferences,Topic
+34,Input Context Length,Topic
+34,Hallucinations,Topic
+34,State-Of-The-Art Recommendation Methods,Topic
+34,Three Public Datasets,Topic
+34,Recommendation Tasks,Topic
+34,Instructions,Topic
+34,Pre-Training Corpus,Topic
+34,Human Preferences,Topic
+34,Specialised Prompts,Topic
+34,Recommendation Signals,Topic
+34,Kerag_R,Topic
+35,Graphrag-R1: Graph Retrieval-Augmented Generation With Process-Constrained Reinforcement Learning,Paper
+35,Chuanyue Yu,Author
+35,Kuo Zhao,Author
+35,Yuhan Li,Author
+35,Heng Chang,Author
+35,Mingjian Feng,Author
+35,Xiangzhe Jiang,Author
+35,Yufei Sun,Author
+35,Jia Li,Author
+35,Yuzhi Zhang,Author
+35,Jianxin Li,Author
+35,Ziwei Zhang,Author
+35,Graphrag-R1,Topic
+35,Graph Retrieval-Augmented Generation (Graphrag),Topic
+35,Llms,Topic
+35,Graph Structures,Topic
+35,Knowledge Representation,Topic
+35,Complex Real-World Relationships,Topic
+35,Multi-Hop Reasoning,Topic
+35,Process-Constrained Outcome-Based Reinforcement Learning (Rl),Topic
+35,Retrieval Tools,Topic
+35,Group Relative Policy Optimization (Grpo),Topic
+35,Rollout-With-Thinking Capability,Topic
+35,Reward Functions,Topic
+35,Progressive Retrieval Attenuation (Pra),Topic
+35,Shallow Retrieval Problem,Topic
+35,Cost-Aware F1 (Caf),Topic
+35,Over-Thinking Problem,Topic
+35,Phase-Dependent Training Strategy,Topic
+35,Cold Start,Topic
+35,Hybrid Graph-Textual Retrieval,Topic
+35,Reasoning Capacity,Topic
+35,In-Domain Datasets,Topic
+35,Out-Of-Domain Datasets,Topic
+35,State-Of-The-Art Graphrag Methods,Topic
+35,Retrieval,Topic
+35,Reasoning,Topic
+35,Performance Improvements,Topic
+35,Computational Costs,Topic
+35,Training Stages,Topic
+35,Retrieval Methods,Topic
+36,A Few Words Can Distort Graphs: Knowledge Poisoning Attacks On Graph-Based Retrieval-Augmented Generation Of Large Language Models,Paper
+36,Jiayi Wen,Author
+36,Tianxin Chen,Author
+36,Zhirun Zheng,Author
+36,Cheng Huang,Author
+36,Graph-Based Retrieval-Augmented Generation (Graphrag),Topic
+36,Large Language Models (Llms),Topic
+36,Knowledge Graphs,Topic
+36,Knowledge Poisoning Attacks (Kpas),Topic
+36,Targeted Kpa (Tkpa),Topic
+36,Universal Kpa (Ukpa),Topic
+36,Question-Answering (Qa),Topic
+36,Graph-Theoretic Analysis,Topic
+36,Linguistic Cues,Topic
+36,Pronouns,Topic
+36,Dependency Relations,Topic
+36,Defense Methods,Topic
+36,Downstream Reasoning,Topic
+36,Graphrag Pipelines,Topic
+37,Noderag: Structuring Graph-Based Rag With Heterogeneous Nodes,Paper
+37,Tianyang Xu,Author
+37,Haojie Zheng,Author
+37,Chengze Li,Author
+37,Haoxiang Chen,Author
+37,Yixin Liu,Author
+37,Ruoxi Chen,Author
+37,Lichao Sun,Author
+37,Retrieval-Augmented Generation,Topic
+37,Large Language Models,Topic
+37,Graph-Based Rag,Topic
+37,Knowledge Graph Index,Topic
+37,Graph Algorithms,Topic
+37,Graph Structures,Topic
+37,Heterogeneous Graph Structures,Topic
+37,Rag Workflow,Topic
+37,Graphrag,Topic
+37,Lightrag,Topic
+37,Question-Answering Performance,Topic
+37,Multi-Hop Benchmarks,Topic
+37,Indexing Time,Topic
+37,Query Time,Topic
+37,Storage Efficiency,Topic
+37,Retrieval Tokens,Topic
+37,Open-Ended Evaluations,Topic
+37,Performance,Topic
+38,Fastrag: Retrieval Augmented Generation For Semi-Structured Data,Paper
+38,Amar Abane,Author
+38,Anis Bekri,Author
+38,Abdella Battou,Author
+38,Saddek Bensalem,Author
+38,Large Language Models (Llm),Topic
+38,Retrieval-Augmented Generation (Rag),Topic
+38,Vectorrag,Topic
+38,Graphrag,Topic
+38,Semi-Structured Technical Data,Topic
+38,Semi-Structured Data,Topic
+38,Schema Learning,Topic
+38,Script Learning,Topic
+38,Text Search,Topic
+38,Knowledge Graph (Kg),Topic
+38,Knowledge Graph (Kg) Querying,Topic
+38,Accurate Question Answering,Topic
+38,Network Management,Topic
+38,Network Data,Topic
+38,Data Processing,Topic
+38,Increasingly Complex Networks,Topic
+38,Time,Topic
+38,Cost,Topic
+38,Retrieval,Topic
+38,Context-Rich Information,Topic
+38,Accuracy,Topic
+38,Fastrag,Topic
+39,Ontorag: Enhancing Question-Answering Through Automated Ontology Derivation From Unstructured Knowledge Bases,Paper
+39,Yash Tiwari,Author
+39,Owais Ahmad Lone,Author
+39,Mayukha Pal,Author
+39,Ontologies,Topic
+39,Knowledge Bases,Topic
+39,Question Answering (Qa) Systems,Topic
+39,Large Language Models (Llms),Topic
+39,Ontology Creation,Topic
+39,Ontorag,Topic
+39,Automated Pipeline,Topic
+39,Unstructured Knowledge Bases,Topic
+39,Electrical Relay Documents,Topic
+39,Web Scraping,Topic
+39,Pdf Parsing,Topic
+39,Hybrid Chunking,Topic
+39,Information Extraction,Topic
+39,Knowledge Graph Construction,Topic
+39,Queryable Ontology,Topic
+39,Graph Based Methods,Topic
+39,Global Sensemaking Capabilities,Topic
+39,Retrieval Augmented Generation (Rag),Topic
+39,Graphrag,Topic
+39,Vector Rag,Topic
+39,Comprehensiveness,Topic
+39,Diversity,Topic
+39,Semantic Web,Topic
+39,Automating Ontology Creation,Topic
+40,Polyg: Effective And Efficient Graphrag With Adaptive Graph Traversal,Paper
+40,Renjie Liu,Author
+40,Haitian Jiang,Author
+40,Xiao Yan,Author
+40,Bo Tang,Author
+40,Jinyang Li,Author
+40,Graphrag,Topic
+40,Large Language Models,Topic
+40,External Knowledge Graphs,Topic
+40,Fact Retrieval,Topic
+40,Graph Traversal Strategies,Topic
+40,Fixed Graph Traversal Strategy,Topic
+40,Adaptive Graph Traversal,Topic
+40,User Questions,Topic
+40,Question Classification,Topic
+40,Four-Class Taxonomy,Topic
+40,Polyg,Topic
+40,Query Planner,Topic
+40,Unified Interface,Topic
+40,Execution Engine,Topic
+40,Generation Quality,Topic
+40,Efficiency,Topic
+40,Response Time,Topic
+40,Token Usage,Topic
+40,Win Rate,Topic
+40,Speedup,Topic
+41,Ket-Rag: A Cost-Efficient Multi-Granular Indexing Framework For Graph-Rag,Paper
+41,Yiqian Huang,Author
+41,Shiqi Zhang,Author
+41,Xiaokui Xiao,Author
+41,Graph-Rag,Topic
+41,Ket-Rag,Topic
+41,Knowledge Graph,Topic
+41,Large Language Model,Topic
+41,Question Answering,Topic
+41,Biomedicine,Topic
+41,Law,Topic
+41,Political Science,Topic
+41,Multi-Hop Reasoning,Topic
+41,Proprietary Documents,Topic
+41,Knn Graphs,Topic
+41,Entity Relationships,Topic
+41,Triplet-Based Knowledge Graphs,Topic
+41,Indexing Costs,Topic
+41,Large Document Collections,Topic
+41,Multi-Granular Indexing,Topic
+41,Knowledge Graph Skeleton,Topic
+41,Text-Keyword Bipartite Graph,Topic
+41,Retrieval,Topic
+41,Retrieval Quality,Topic
+41,Retrieval Effectiveness,Topic
+41,Generation Quality,Topic
+41,Microsoft'S Graph-Rag,Topic
+41,Text Chunks,Topic
+41,Local Search Strategy,Topic
+42,How Significant Are The Real Performance Gains? An Unbiased Evaluation Framework For Graphrag,Paper
+42,Qiming Zeng,Author
+42,Xiao Yan,Author
+42,Hao Luo,Author
+42,Yuhao Lin,Author
+42,Yuxiang Wang,Author
+42,Fangcheng Fu,Author
+42,Bo Du,Author
+42,Quanqing Xu,Author
+42,Jiawei Jiang,Author
+42,Graph-Based Retrieval-Augmented Generation (Graphrag),Topic
+42,Knowledge Graphs,Topic
+42,Large Language Models (Llms),Topic
+42,Answer Quality,Topic
+42,Unrelated Questions,Topic
+42,Evaluation Biases,Topic
+42,Unbiased Evaluation Framework,Topic
+42,Graph-Text-Grounded Question Generation,Topic
+42,Unbiased Evaluation Procedure,Topic
+42,Llm-Based Answer Assessment,Topic
+42,Performance Gains,Topic
+42,Underlying Dataset,Topic
+42,Scientific Evaluations,Topic
+42,Graphrag Research,Topic
+42,Solid Foundations,Topic
+42,User Questions,Topic
+43,Youtu-Graphrag: Vertically Unified Agents For Graph Retrieval-Augmented Complex Reasoning,Paper
+43,Junnan Dong,Author
+43,Siyu An,Author
+43,Yifei Yu,Author
+43,Qian-Wen Zhang,Author
+43,Linhao Luo,Author
+43,Xiao Huang,Author
+43,Yunsheng Wu,Author
+43,Di Yin,Author
+43,Xing Sun,Author
+43,Graph Retrieval-Augmented Generation (Graphrag),Topic
+43,Large Language Models,Topic
+43,Complex Reasoning,Topic
+43,Explicitly Structured Graphs,Topic
+43,Graph Construction,Topic
+43,Graph Retrieval,Topic
+43,Domain Shifts,Topic
+43,Youtu-Graphrag,Topic
+43,Vertically Unified Agentic Paradigm,Topic
+43,Seed Graph Schema,Topic
+43,Targeted Entity Types,Topic
+43,Relations,Topic
+43,Attribute Types,Topic
+43,Scalability Over Unseen Domains,Topic
+43,Dually-Perceived Community Detection,Topic
+43,Structural Topology,Topic
+43,Subgraph Semantics,Topic
+43,Hierarchical Knowledge Tree,Topic
+43,Top-Down Filtering,Topic
+43,Bottom-Up Reasoning,Topic
+43,Community Summaries,Topic
+43,Agentic Retriever,Topic
+43,Complex Queries,Topic
+43,Tractable Sub-Queries,Topic
+43,Reflection,Topic
+43,Knowledge Leaking Problem,Topic
+43,Pre-Trained Llm,Topic
+43,Anonymous Dataset,Topic
+43,Anonymity Reversion,Topic
+43,Graphrag Frameworks,Topic
+43,Six Challenging Benchmarks,Topic
+43,Robustness,Topic
+43,Pareto Frontier,Topic
+43,Token Costs,Topic
+43,Accuracy,Topic
+43,Adaptability,Topic
+43,Domain Transfer,Topic
+43,Schema,Topic
+44,Dyg-Rag: Dynamic Graph Retrieval-Augmented Generation With Event-Centric Reasoning,Paper
+44,Qingyun Sun,Author
+44,Jiaqi Yuan,Author
+44,Shan He,Author
+44,Xiao Guan,Author
+44,Haonan Yuan,Author
+44,Xingcheng Fu,Author
+44,Jianxin Li,Author
+44,Philip S. Yu,Author
+44,Graph Retrieval-Augmented Generation,Topic
+44,Retrieval-Augmented Generation,Topic
+44,Large Language Models,Topic
+44,External Structured Knowledge,Topic
+44,Temporal Reasoning,Topic
+44,Dynamic Graph,Topic
+44,Event-Centric Reasoning,Topic
+44,Dynamic Event Units (Deus),Topic
+44,Temporal Anchors,Topic
+44,Time-Aware Retrieval,Topic
+44,Event Graph,Topic
+44,Multi-Hop Reasoning,Topic
+44,Event Timeline Retrieval,Topic
+44,Time Chain-Of-Thought,Topic
+44,Temporally Grounded Answer Generation,Topic
+44,Temporal Qa Benchmarks,Topic
+44,Time-Sensitive Queries,Topic
+44,Temporal Knowledge,Topic
+44,Unstructured Text,Topic
+44,Causal Dependencies,Topic
+44,Event Sequences,Topic
+45,Enhancing Structured-Data Retrieval With Graphrag: Soccer Data Case Study,Paper
+45,Zahra Sepasdar,Author
+45,Sushant Gautam,Author
+45,Cise Midoglu,Author
+45,Michael A. Riegler,Author
+45,Pål Halvorsen,Author
+45,Structured-Graphrag,Topic
+45,Knowledge Graphs,Topic
+45,Structured Datasets,Topic
+45,Natural Language Queries,Topic
+45,Information Retrieval,Topic
+45,Retrieval-Augmented Generation,Topic
+45,Soccer Data,Topic
+45,Query Processing Efficiency,Topic
+45,Response Times,Topic
+45,Sequential Search,Topic
+45,Index-Based Retrieval,Topic
+45,Traditional Data Retrieval Methods,Topic
+45,Language Model Outputs,Topic
+45,Structured Format,Topic
+45,Interconnected Data Structures,Topic
+45,Accuracy And Relevance,Topic
+45,Graph-Based Approach,Topic
+45,Reliability Of Results,Topic
+46,Knowledge Retrieval In Llm Gaming: A Shift From Entity-Centric To Goal-Oriented Graphs,Paper
+46,Jonathan Leung,Author
+46,Yongjie Wang,Author
+46,Zhiqi Shen,Author
+46,Large Language Models (Llms),Topic
+46,Step-By-Step Reasoning,Topic
+46,Retrieval-Augmented Methods,Topic
+46,Graphrag,Topic
+46,Cross-Document Extraction And Indexing,Topic
+46,Entity-Relation Graphs,Topic
+46,Local Connectivity,Topic
+46,Goal-Oriented Graphs (Gogs),Topic
+46,Goals,Topic
+46,Logical Dependencies,Topic
+46,Reasoning Paths,Topic
+46,High-Level Goals,Topic
+46,Subgoals,Topic
+46,Coherent Reasoning Chains,Topic
+46,Llm Prompting,Topic
+46,Game-Playing Tasks,Topic
+46,Minecraft Testbed,Topic
+46,Reasoning Ability,Topic
+47,Evaluating The Performance Of Rag Methods For Conversational Ai In The Airport Domain,Paper
+47,Yuyang Li,Author
+47,Philip J. M. Kerbusch,Author
+47,Raimon H. R. Pruim,Author
+47,Tobias Käfer,Author
+47,Airport Domain,Topic
+47,Airport Environments,Topic
+47,Automation,Topic
+47,Conversational Ai,Topic
+47,Flight Information Systems,Topic
+47,Standard Airport Queries,Topic
+47,Airport Terminology,Topic
+47,Jargon,Topic
+47,Abbreviations,Topic
+47,Dynamic Questions,Topic
+47,Reasoning,Topic
+47,Retrieval-Augmented Generation (Rag),Topic
+47,Traditional Rag,Topic
+47,Sql Rag,Topic
+47,Knowledge Graph-Based Rag (Graph Rag),Topic
+47,Bm25,Topic
+47,Gpt-4,Topic
+47,Hallucinations,Topic
+47,Airport Safety,Topic
+48,Hybridrag: Integrating Knowledge Graphs And Vector Retrieval Augmented Generation For Efficient Information Extraction,Paper
+48,Bhaskarjit Sarmah,Author
+48,Benika Hall,Author
+48,Rohan Rao,Author
+48,Sunil Patel,Author
+48,Stefano Pasquali,Author
+48,Dhagash Mehta,Author
+48,Hybridrag,Topic
+48,Graphrag,Topic
+48,Vectorrag,Topic
+48,Retrieval Augmented Generation,Topic
+48,Knowledge Graphs,Topic
+48,Vector Databases,Topic
+48,Q&A Systems,Topic
+48,Information Extraction,Topic
+48,Financial Documents,Topic
+48,Earnings Call Transcripts,Topic
+48,Domain-Specific Terminology,Topic
+48,Complex Document Formats,Topic
+48,Retrieval Accuracy,Topic
+48,Answer Generation,Topic
+48,Q&A Format,Topic
+48,Ground-Truth Q&As,Topic
+48,Large Language Models,Topic
+48,Financial Applications,Topic
+49,Beyond Chunks And Graphs: Retrieval-Augmented Generation Through Triplet-Driven Thinking,Paper
+49,Shengbo Gong,Author
+49,Xianfeng Tang,Author
+49,Carl Yang,Author
+49,Wei Jin,Author
+49,Retrieval-Augmented Generation (Rag),Topic
+49,Large Language Models (Llms),Topic
+49,Multi-Round Rag,Topic
+49,Graph Rag,Topic
+49,T^2Rag,Topic
+49,Knowledge Base Of Atomic Triplets,Topic
+49,Triplet Database,Topic
+49,Decompose Questions Into Searchable Triplets With Placeholders,Topic
+49,Hallucinations,Topic
+49,External Knowledge,Topic
+49,Performance,Topic
+49,Efficiency,Topic
+49,Reasoning,Topic
+49,Llm Calls,Topic
+49,Token Costs,Topic
+49,Graph Construction,Topic
+49,Retrieval Redundancy,Topic
+49,Retrieval Costs,Topic
+49,Datasets,Topic
+49,Retrieving Evidence From The Triplet Database,Topic

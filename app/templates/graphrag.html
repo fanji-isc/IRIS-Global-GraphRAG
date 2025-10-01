@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GraphRAG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+  <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>GraphRAG</h1>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-body">
+        <div class="inputbar">
+          <input id="q" type="text" autocomplete="off" placeholder="Ask one question…" />
+          <button id="go">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Answer card -->
+    <div id="answer-card" class="card hidden">
+      <div class="section-title">
+        <span>Answer</span>
+        <!-- Show Graph button lives in the header -->
+        <button id="show-graph" class="mini-btn" disabled>Show Graph</button>
+      </div>
+      <div class="section-body">
+        <div id="answer" class="answer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings switcher -->
+  <div class="settings-wrapper" id="settings">
+    <button class="settings-toggle" id="settings-toggle" title="Switch page">⚙️</button>
+    <div class="settings-menu" id="settings-menu" role="dialog" aria-hidden="true">
+      <form id="settings-form">
+        <h4>Go to</h4>
+        <label><input type="radio" name="mode" value="/llm"> LLM</label>
+        <label><input type="radio" name="mode" value="/rag"> RAG</label>
+        <label><input type="radio" name="mode" value="/graphrag"> GraphRAG</label>
+        <label><input type="radio" name="mode" value="/llm-vs-rag"> LLM vs RAG</label>
+        <label><input type="radio" name="mode" value="/rag-vs-graphrag"> RAG vs GraphRAG</label>
+        <button type="submit" class="go-btn">Go</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Graph Modal -->
+  <div id="graph-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>GraphRAG visualization</div>
+        <button id="close-modal" class="modal-close">Close</button>
+      </div>
+      <div id="graph3d"></div>
+    </div>
+  </div>
+
+  <script>
+    const q = document.getElementById('q');
+    const go = document.getElementById('go');
+    const answerCard = document.getElementById('answer-card');
+    const answerEl = document.getElementById('answer');
+
+    const showBtn = document.getElementById('show-graph');
+    const modal = document.getElementById('graph-modal');
+    const closeModal = document.getElementById('close-modal');
+    const graph3dEl = document.getElementById('graph3d');
+
+    let LAST_GRAPH = null;
+    let Graph3D = null;
+
+    // typing dots
+    function createTypingNode() {
+      const wrap = document.createElement('div');
+      wrap.className = 'typing';
+      wrap.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      return wrap;
+    }
+    function startTyping(targetEl) {
+      stopTyping(targetEl);
+      targetEl.textContent = '';
+      const node = createTypingNode();
+      targetEl.appendChild(node);
+      targetEl.__typingNode = node;
+    }
+    function stopTyping(targetEl) {
+      if (targetEl && targetEl.__typingNode) {
+        targetEl.__typingNode.remove();
+        targetEl.__typingNode = null;
+      }
+    }
+
+    // Open/close modal with 3D graph
+    // function openGraphModal(graph) {
+    //   if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
+    //     alert('No graph to display yet.');
+    //     return;
+    //   }
+    //   modal.classList.add('open');
+
+    //   // render after modal is visible
+    //   setTimeout(() => {
+    //     graph3dEl.innerHTML = '';
+
+    //     const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
+    //     const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
+
+    //     Graph3D = ForceGraph3D()(graph3dEl)
+    //       .nodeColor(n => colorFor(n.type))
+    //       .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
+    //       .linkColor(() => '#4b5563')
+    //       .linkOpacity(0.4);
+
+    //     // Enable nice orbit controls (left-drag background to rotate)
+    //     if (Graph3D.controls) {
+    //       const controls = Graph3D.controls();
+    //       controls.autoRotate = false;
+    //       controls.enableRotate = true;
+    //       controls.enablePan = true;
+    //       controls.enableZoom = true;
+    //       controls.enableDamping = true;
+    //       controls.dampingFactor = 0.05;
+    //       if (window.THREE && controls.mouseButtons) {
+    //         controls.mouseButtons = {
+    //           LEFT:   THREE.MOUSE.ROTATE,
+    //           MIDDLE: THREE.MOUSE.DOLLY,
+    //           RIGHT:  THREE.MOUSE.PAN
+    //         };
+    //       }
+    //     }
+
+    //     // disable node drag so background dragging always orbits
+    //     if (Graph3D.enableNodeDrag) Graph3D.enableNodeDrag(false);
+
+    //     Graph3D.graphData(graph);
+    //   }, 30);
+    // }
+
+
+
+  function openGraphModal(graph) {
+    if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
+      alert('No graph to display yet.');
+      return;
+    }
+    modal.classList.add('open');
+
+    setTimeout(() => {
+      graph3dEl.innerHTML = '';
+
+      const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
+      const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
+
+      Graph3D = ForceGraph3D()(graph3dEl)
+        .nodeColor(n => colorFor(n.type))
+        .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
+        .linkColor(() => '#4b5563')
+        .linkOpacity(0.4);
+
+      // Orbit controls for background rotation
+      const controls = Graph3D.controls && Graph3D.controls();
+      if (controls) {
+        controls.autoRotate = false;
+        controls.enableRotate = true;
+        controls.enablePan = true;
+        controls.enableZoom = true;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        // Make sure left-drag on background rotates
+        if (window.THREE && controls.mouseButtons) {
+          controls.mouseButtons = {
+            LEFT:   THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT:  THREE.MOUSE.PAN
+          };
+        }
+      }
+
+      if (Graph3D.enableNodeDrag) Graph3D.enableNodeDrag(true);
+
+      Graph3D
+        .onNodeDrag(() => { if (Graph3D.controls) Graph3D.controls().enabled = false; })
+        .onNodeDragEnd(() => { if (Graph3D.controls) Graph3D.controls().enabled = true; });
+
+      Graph3D.graphData(graph);
+    }, 30);
+  }
+
+
+    function closeGraph() {
+      modal.classList.remove('open');
+      graph3dEl.innerHTML = '';
+      Graph3D = null;
+    }
+    showBtn.addEventListener('click', () => openGraphModal(LAST_GRAPH));
+    closeModal.addEventListener('click', closeGraph);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeGraph(); });
+
+    async function run() {
+      const query = q.value.trim();
+      if (!query) return;
+      go.disabled = true;
+
+      // show Answer box + typing; reset graph cache
+      answerCard.classList.remove('hidden');
+      startTyping(answerEl);
+      LAST_GRAPH = null;
+      showBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/graphrag', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, top_k: 5 })
+        });
+        const data = await res.json();
+        stopTyping(answerEl);
+
+        if (!res.ok) throw new Error(data.error || ('HTTP '+res.status));
+
+        answerEl.textContent = data.answer || '(no answer)';
+
+        // Store graph for popup; enable button if we have nodes
+        LAST_GRAPH = data.graph || null;
+        const hasGraph = LAST_GRAPH && Array.isArray(LAST_GRAPH.nodes) && LAST_GRAPH.nodes.length > 0;
+        showBtn.disabled = !hasGraph;
+      } catch (e) {
+        stopTyping(answerEl);
+        answerEl.textContent = 'Error: ' + e.message;
+        LAST_GRAPH = null;
+        showBtn.disabled = true;
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    go.addEventListener('click', run);
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+
+    (function setupSettingsSwitcher(){
+      const toggle = document.getElementById('settings-toggle');
+      const menu   = document.getElementById('settings-menu');
+      const form   = document.getElementById('settings-form');
+
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+        if (menu.classList.contains('open')) {
+          const first = form.querySelector('input[type=radio]');
+          first && first.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && e.target !== toggle) menu.classList.remove('open');
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.classList.remove('open'); });
+
+      const path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+      const map = new Map([
+        ['/llm', '/llm'],
+        ['/rag', '/rag'],
+        ['/graphrag', '/graphrag'],
+        ['/llm-vs-rag', '/llm-vs-rag'],
+        ['/rag-vs-graphrag', '/rag-vs-graphrag']
+      ]);
+      const current = [...map.keys()].find(p => path === p) || '/llm';
+      const radio = form.querySelector(`input[value="${map.get(current)}"]`);
+      if (radio) radio.checked = true;
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="mode"]:checked');
+        if (selected && selected.value) window.location.href = selected.value;
+      });
+    })();
+  </script>
+</body>
+</html>

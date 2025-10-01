@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>RAG vs GraphRAG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+</head>
+<body>
+  <div class="wrap">
+    <h1>RAG vs GraphRAG</h1>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-body">
+        <div class="inputbar">
+          <input id="q" type="text" autocomplete="off"  placeholder="Ask one question to compare answers…" />
+          <button id="go">Compare</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results are hidden until a search starts -->
+    <div id="results" class="cols hidden">
+      <div class="card">
+        <div class="section-title">RAG</div>
+        <div class="section-body">
+          <div id="rag" class="answer">—</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">
+          GraphRAG
+          <!-- === Added button (disabled until graph arrives) === -->
+          <button id="show-graph" class="mini-btn" disabled>Show Graph</button>
+        </div>
+        <div class="section-body">
+          <div id="gr" class="answer">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings switcher -->
+    <div class="settings-wrapper" id="settings">
+      <button class="settings-toggle" id="settings-toggle" title="Switch page">⚙️</button>
+      <div class="settings-menu" id="settings-menu" role="dialog" aria-hidden="true">
+        <form id="settings-form">
+          <h4>Go to</h4>
+          <label><input type="radio" name="mode" value="/llm"> LLM</label>
+          <label><input type="radio" name="mode" value="/rag"> RAG</label>
+          <label><input type="radio" name="mode" value="/graphrag"> GraphRAG</label>
+          <label><input type="radio" name="mode" value="/llm-vs-rag"> LLM vs RAG</label>
+          <label><input type="radio" name="mode" value="/rag-vs-graphrag"> RAG vs GraphRAG</label>
+          <button type="submit" class="go-btn">Go</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- === Added: Modal to display the graph === -->
+  <div id="graph-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>GraphRAG visualization</div>
+        <button id="close-modal" class="modal-close">Close</button>
+      </div>
+      <div id="graph3d"></div>
+    </div>
+  </div>
+  <!-- === end modal === -->
+
+  <!-- === Added: 3D Force Graph lib === -->
+  <script src="https://unpkg.com/3d-force-graph"></script>
+
+  <script>
+    const q       = document.getElementById('q');
+    const go      = document.getElementById('go');
+    const results = document.getElementById('results');
+    const ragEl   = document.getElementById('rag');
+    const grEl    = document.getElementById('gr');
+
+    // === Added: show-graph button + modal refs ===
+    const showBtn     = document.getElementById('show-graph');
+    const modal       = document.getElementById('graph-modal');
+    const closeModal  = document.getElementById('close-modal');
+    const graph3dEl   = document.getElementById('graph3d');
+    let LAST_GRAPH = null;
+    let Graph3D = null;
+
+    // typing indicator helpers (unchanged)
+    function createTypingNode() {
+      const wrap = document.createElement('div');
+      wrap.className = 'typing';
+      wrap.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      return wrap;
+    }
+    function startTyping(targetEl) {
+      stopTyping(targetEl);
+      targetEl.textContent = '';
+      const node = createTypingNode();
+      targetEl.appendChild(node);
+      targetEl.__typingNode = node;
+    }
+    function stopTyping(targetEl) {
+      if (targetEl && targetEl.__typingNode) {
+        targetEl.__typingNode.remove();
+        targetEl.__typingNode = null;
+      }
+    }
+
+    // === Added: modal open/close + render ===
+    function openGraphModal(graph) {
+      if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
+        alert('No graph to display yet.');
+        return;
+      }
+      modal.classList.add('open');
+
+      // (re)init renderer after modal is visible
+      setTimeout(() => {
+        graph3dEl.innerHTML = '';
+
+        const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
+        const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
+
+        Graph3D = ForceGraph3D()(graph3dEl)
+          .nodeColor(n => colorFor(n.type))
+          .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
+          .linkColor(() => '#4b5563')
+          .linkOpacity(0.4);
+
+        const controls = Graph3D.controls && Graph3D.controls();
+        if (controls) {
+          controls.autoRotate = false;
+          controls.enableDamping = true;
+          controls.dampingFactor = 0.05;
+        }
+
+        Graph3D.graphData(graph);
+      }, 30);
+    }
+    function closeGraph() {
+      modal.classList.remove('open');
+      // basic cleanup
+      graph3dEl.innerHTML = '';
+      Graph3D = null;
+    }
+    closeModal.addEventListener('click', closeGraph);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeGraph(); });
+    showBtn.addEventListener('click', () => openGraphModal(LAST_GRAPH));
+
+    async function run() {
+      const query = q.value.trim();
+      if (!query) return;
+      go.disabled = true;
+
+      // reveal results section and show typing in both panes
+      results.classList.remove('hidden');
+      startTyping(ragEl);
+      startTyping(grEl);
+
+      // === Added: reset graph state/button ===
+      LAST_GRAPH = null;
+      showBtn.disabled = true;
+
+      const ragReq = fetch('/api/ask', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ query })
+      }).then(r => r.json());
+
+      const grReq = fetch('/api/graphrag', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ query })
+      }).then(r => r.json());
+
+      try {
+        const [ragRes, grRes] = await Promise.allSettled([ragReq, grReq]);
+
+        // RAG pane (unchanged)
+        stopTyping(ragEl);
+        if (ragRes.status === 'fulfilled' && !ragRes.value.error) {
+          ragEl.textContent = ragRes.value.answer || '(no answer)';
+        } else {
+          const msg = ragRes.status === 'fulfilled'
+            ? (ragRes.value.error || 'Unknown error')
+            : (ragRes.reason?.message || 'Network error');
+          ragEl.textContent = 'Error: ' + msg;
+        }
+
+        // GraphRAG pane + store graph for modal
+        stopTyping(grEl);
+        if (grRes.status === 'fulfilled' && !grRes.value.error) {
+          grEl.textContent = grRes.value.answer || '(no answer)';
+          LAST_GRAPH = grRes.value.graph || null;
+          const hasGraph = LAST_GRAPH && Array.isArray(LAST_GRAPH.nodes) && LAST_GRAPH.nodes.length > 0;
+          showBtn.disabled = !hasGraph;
+        } else {
+          const msg = grRes.status === 'fulfilled'
+            ? (grRes.value.error || 'Unknown error')
+            : (grRes.reason?.message || 'Network error');
+          grEl.textContent = 'Error: ' + msg;
+          LAST_GRAPH = null;
+          showBtn.disabled = true;
+        }
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    // Settings switcher (unchanged)
+    (function setupSettingsSwitcher(){
+      const toggle = document.getElementById('settings-toggle');
+      const menu   = document.getElementById('settings-menu');
+      const form   = document.getElementById('settings-form');
+
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+        if (menu.classList.contains('open')) {
+          const first = form.querySelector('input[type=radio]');
+          first && first.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && e.target !== toggle) menu.classList.remove('open');
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.classList.remove('open'); });
+
+      const path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+      const map = new Map([
+        ['/llm', '/llm'],
+        ['/rag', '/rag'],
+        ['/graphrag', '/graphrag'],
+        ['/llm-vs-rag', '/llm-vs-rag'],
+        ['/rag-vs-graphrag', '/rag-vs-graphrag']
+      ]);
+      const current = [...map.keys()].find(p => path === p) || '/llm';
+      const radio = form.querySelector(`input[value="${map.get(current)}"]`);
+      if (radio) radio.checked = true;
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="mode"]:checked');
+        if (selected && selected.value) window.location.href = selected.value;
+      });
+    })();
+
+    go.addEventListener('click', run);
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+  </script>
+</body>
+</html>

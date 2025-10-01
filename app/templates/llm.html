@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LLM (No Retrieval)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+</head>
+<body>
+  <div class="wrap">
+    <h1>LLM</h1>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-body">
+        <div class="inputbar">
+          <input id="q" type="text"  autocomplete="off" placeholder="Ask one question…" />
+          <button id="go">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Answer box is hidden until a search starts -->
+    <div id="answer-card" class="card hidden">
+      <div class="section-title">Answer</div>
+      <div class="section-body">
+        <div id="answer" class="answer">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings switcher -->
+  <div class="settings-wrapper" id="settings">
+    <button class="settings-toggle" id="settings-toggle" title="Switch page">⚙️</button>
+    <div class="settings-menu" id="settings-menu" role="dialog" aria-hidden="true">
+      <form id="settings-form">
+        <h4>Go to</h4>
+        <label><input type="radio" name="mode" value="/llm"> LLM</label>
+        <label><input type="radio" name="mode" value="/rag"> RAG</label>
+        <label><input type="radio" name="mode" value="/graphrag"> GraphRAG</label>
+        <label><input type="radio" name="mode" value="/llm-vs-rag"> LLM vs RAG</label>
+        <label><input type="radio" name="mode" value="/rag-vs-graphrag"> RAG vs GraphRAG</label>
+        <button type="submit" class="go-btn">Go</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const q = document.getElementById('q');
+    const go = document.getElementById('go');
+    const answerCard = document.getElementById('answer-card');
+    const answerEl = document.getElementById('answer');
+
+    // typing helpers
+    function createTypingNode(){
+      const wrap = document.createElement('div');
+      wrap.className = 'typing';
+      wrap.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      return wrap;
+    }
+    function startTyping(targetEl){
+      stopTyping(targetEl);
+      targetEl.textContent = '';
+      const node = createTypingNode();
+      targetEl.appendChild(node);
+      targetEl.__typingNode = node;
+    }
+    function stopTyping(targetEl){
+      if (targetEl && targetEl.__typingNode){
+        targetEl.__typingNode.remove();
+        targetEl.__typingNode = null;
+      }
+    }
+
+    async function run(){
+      const query = q.value.trim();
+      if (!query) return;
+      go.disabled = true;
+
+      // show answer box and typing…
+      answerCard.classList.remove('hidden');
+      startTyping(answerEl);
+
+      try{
+        const res = await fetch('/api/llm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        let data;
+        try { data = await res.json(); }
+        catch { throw new Error(`Non-JSON response (status ${res.status})`); }
+
+        stopTyping(answerEl);
+
+        if (res.ok && typeof data.answer === 'string'){
+          answerEl.textContent = data.answer || '(no answer)';
+        } else {
+          answerEl.textContent = 'Error: ' + (data.error || `HTTP ${res.status}`);
+        }
+      } catch (e){
+        stopTyping(answerEl);
+        answerEl.textContent = 'Error: ' + e.message;
+      } finally {
+        go.disabled = false;
+        q.focus();
+      }
+    }
+
+    go.addEventListener('click', run);
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+
+    // Settings switcher
+    (function setupSettingsSwitcher(){
+      const toggle = document.getElementById('settings-toggle');
+      const menu   = document.getElementById('settings-menu');
+      const form   = document.getElementById('settings-form');
+
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+        if (menu.classList.contains('open')) {
+          const first = form.querySelector('input[type=radio]');
+          first && first.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && e.target !== toggle) menu.classList.remove('open');
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.classList.remove('open'); });
+
+      const path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+      const map = new Map([
+        ['/llm', '/llm'],
+        ['/rag', '/rag'],
+        ['/graphrag', '/graphrag'],
+        ['/llm-vs-rag', '/llm-vs-rag'],
+        ['/rag-vs-graphrag', '/rag-vs-graphrag']
+      ]);
+      const current = [...map.keys()].find(p => path === p) || '/llm';
+      const radio = form.querySelector(`input[value="${map.get(current)}"]`);
+      if (radio) radio.checked = true;
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="mode"]:checked');
+        if (selected && selected.value) window.location.href = selected.value;
+      });
+    })();
+  </script>
+</body>
+</html>

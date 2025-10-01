@@ -1,0 +1,10 @@
+# intersystems-irispython==5.2.1
+sqlalchemy-iris 
+sentence_transformers
+setuptools
+openai
+dotenv
+flask
+pandas
+#
+#pip install --force-reinstall intersystems-irispython==5.2.1 

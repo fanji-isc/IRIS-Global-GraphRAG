@@ -1,0 +1,5 @@
+zn "%SYS"
+do ##class(Security.Users).UnExpireUserPasswords("*")
+do ##class(Security.Users).SetPassword("_SYSTEM","SYS")
+zn "USER"
+halt
