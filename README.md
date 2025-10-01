@@ -68,6 +68,6 @@ Then run
 docker compose up 
 ```
 
-Demo: http://localhost:5001
+Demo: http://localhost:8000
 
 IRIS Portal: http://localhost:52773
