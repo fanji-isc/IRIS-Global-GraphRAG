@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 # IRIS-Global-GraphRAG
 GraphRAG with InterSystems IRIS — A research and demo project that loads academic papers and their relationships into InterSystems IRIS, builds embeddings, and enables semantic + graph-based retrieval using vector search and knowledge graph queries.
-=======
 # Introduction
 
 Traditional RAG pulls relevant chunks with vector search, but it can miss structure—who’s related to what, and how. GraphRAG adds that structure by blending graph context (entities + relations) with dense retrieval, so answers can be more grounded and explainable. In this demo, we use 50 recent GraphRAG-related papers (title, abstract, authors, URL, date pulled from arXiv) and a Graph Transformer to automatically extract entities (nodes) and relations (edges) from the text; the graph is stored in IRIS globals, while the same papers are embedded for dense retrieval.
@@ -19,6 +17,7 @@ This app lets you run the same question through three pipelines and compare resu
 
 Here’s a simple query flow starting with the agent and showing the three paths:
 
+```text
 User Question
       │
       ▼
@@ -58,6 +57,7 @@ User Question
                                                 visualization
 
 
+
 # Build & run
 
 Add your own OPEN AI key to .env file
@@ -70,4 +70,3 @@ docker compose up
 Demo: http://localhost:5001
 
 IRIS Portal: http://localhost:52773
->>>>>>> 08cadea (Initial commit of GraphRAG with IRIS project)
