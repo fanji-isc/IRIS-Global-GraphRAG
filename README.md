@@ -1,6 +1,6 @@
 # InterSystems IRIS GraphRAG
 GraphRAG with InterSystems IRIS — A research and demo project that loads academic papers and their relationships into InterSystems IRIS, builds embeddings, and enables semantic + graph-based retrieval using vector search and knowledge graph queries.
-# Introduction
+## Introduction
 
 Traditional RAG pulls relevant chunks with vector search, but it can miss structure—who’s related to what, and how. GraphRAG adds that structure by blending graph context (entities + relations) with dense retrieval, so answers can be more grounded and explainable. In this demo, we use 50 recent GraphRAG-related papers (title, abstract, authors, URL, date pulled from arXiv) and a Graph Transformer to automatically extract entities (nodes) and relations (edges) from the text; the graph is stored in IRIS globals, while the same papers are embedded for dense retrieval.
 
@@ -12,7 +12,7 @@ Globals are IRIS’s persistent, sparse, multi-dimensional arrays—perfect for 
 **IRIS SQL for vector retrieval**
 Each paper is embedded with MiniLM-L6-v2 (384d), stored in IRIS as VECTOR, and indexed with HNSW for fast approximate nearest-neighbor search.
 
-# Demo Overview
+## Demo Overview
 This app lets you run the same question through three pipelines and compare results side-by-side—LLM (no retrieval), RAG (vector retrieval over papers), and GraphRAG (RAG + a graph neighborhood from IRIS globals) with an interactive entity-relation visualization.
 
 Here’s a simple query flow starting with the agent and showing the three paths:
@@ -59,7 +59,7 @@ User Question
 
 ```
 
-# InterSystems IRIS GraphRAG Quickstart
+## InterSystems IRIS GraphRAG Quickstart
      1. Clone the repo
 
     ```Shell
