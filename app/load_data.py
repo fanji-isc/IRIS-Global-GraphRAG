@@ -16,14 +16,27 @@ args = {
     }
 conn = iris.connect(**args)
 irispy = iris.createIRIS(conn)
+conn_url="iris://_SYSTEM:SYS@iris:1972/USER"
+engine = create_engine(conn_url)
 
-print(os.getcwd())
-print(os.path.exists("data/papers.csv"))
+def reset_globals():
+    try:
+        if irispy.isDefined("GraphContent"):
+            irispy.kill("GraphContent")
+        if irispy.isDefined("GraphRelations"):
+            irispy.kill("GraphRelations")
+        print("✓ Reset globals: ^GraphContent, ^GraphRelations")
+    except Exception:
+        pass
+
+def reset_table():
+    with engine.begin() as conn:  
+        try:
+            conn.execute(text("DROP TABLE SQLUser.paper_content"))
+        except Exception:
+            pass
+
 def load_papers(csv_path="data/papers.csv"):
-
-
-    conn = iris.connect(**args)
-    irispy = iris.createIRIS(conn)
 
     with open(csv_path, newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -41,15 +54,10 @@ def load_papers(csv_path="data/papers.csv"):
             irispy.set(published, "GraphContent", docid, "published")
             irispy.set(authors,   "GraphContent", docid, "authors")
 
-    conn.close()
 
 
 def load_relations(csv_path="data/relations.csv"):
  
-   
-    conn = iris.connect(**args)
-    irispy = iris.createIRIS(conn)
-
     with open(csv_path, newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -64,12 +72,10 @@ def load_relations(csv_path="data/relations.csv"):
             irispy.set(target_type, "GraphRelations", docid, "Node", target)
             irispy.set(relation,    "GraphRelations", docid, "Edge", source, target)
 
-    conn.close()
 
 
 def embed_and_load_papers(
     csv_path="data/papers_combined.csv",
-    conn_url="iris://_SYSTEM:SYS@iris:1972/USER",
     model_name="all-MiniLM-L6-v2"
 ):
     df = pd.read_csv(csv_path)
@@ -85,7 +91,6 @@ def embed_and_load_papers(
     embeddings = emb_model.encode(df['combined'].tolist(), normalize_embeddings=True)
     df["paper_vector"] = embeddings.tolist()
 
-    engine = create_engine(conn_url)
 
     create_sql = """
         CREATE TABLE IF NOT EXISTS SQLUser.paper_content (
@@ -121,19 +126,16 @@ def embed_and_load_papers(
                     "paper_vector": str(row["paper_vector"])
                 })
 
-    print("✅ Papers embedded and loaded into SQLUser.PAPER_CONTENT")
+    print("Papers embedded and loaded into SQLUser.PAPER_CONTENT")
 
 
 
 def create_vector_index(
-    conn_url="iris://_SYSTEM:SYS@iris:1972/USER",
     table_name="paper_content",
     column_name="paper_vector",
     index_name="HNSWIndex"
 ):
 
-
-    engine = create_engine(conn_url)
 
     sql = f"""
         CREATE INDEX {index_name}
@@ -144,10 +146,13 @@ def create_vector_index(
     with engine.connect() as conn:
         with conn.begin():
             conn.execute(text(sql))
-            print(f"✅ Created HNSW index '{index_name}' on {table_name}({column_name})")
+            print(f"Created HNSW index '{index_name}' on {table_name}({column_name})")
 
 if __name__ == "__main__":
+    reset_globals()
+    reset_table()
     load_papers()
     load_relations()
     embed_and_load_papers()
     create_vector_index()
+  
