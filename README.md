@@ -59,23 +59,25 @@ User Question
 
 ```
 
-## InterSystems IRIS GraphRAG Quickstart
-     1. Clone the repo
+## InterSystems IRIS GraphRAG Quickstart      
+1. Clone the repo
 
-    ```Shell
+    ```bash
           git clone https://github.com/fanji-isc/IRIS-Global-GraphRAG.git
     ```
-     2. Add your own OPEN AI key to .env file in app/
+2. Add your own OPEN AI key to .env file in app/
 
-     ```Shell
+    ```bash
+
           OPENAI_API_KEY=sk-...
      ```
-     3. Start the Docker containers (one for IRIS, one for Flask):
+3. Start the Docker containers (one for IRIS, one for Flask):
 
-     ```Shell
+     ```bash
           docker compose up --build
      ```
-     4. Open the app & IRIS
-          Demo: http://localhost:8000
+4. Open the app & IRIS
+   
+   Demo: http://localhost:8000
 
-          IRIS Portal: http://localhost:52773
+   IRIS Portal: http://localhost:52773
