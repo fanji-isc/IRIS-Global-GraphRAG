@@ -5,8 +5,9 @@ from sentence_transformers import SentenceTransformer
 from sqlalchemy import create_engine, text
 import os
 
+
 args = {
-        'hostname': '127.0.0.1',
+        'hostname': 'iris',
         'port': 1972,
         'namespace': 'USER',
         'username': '_SYSTEM',
@@ -20,14 +21,7 @@ print(os.getcwd())
 print(os.path.exists("data/papers.csv"))
 def load_papers(csv_path="data/papers.csv"):
 
-    args = {
-        'hostname': '127.0.0.1',
-        'port': 1972,
-        'namespace': 'USER',
-        'username': '_SYSTEM',
-        'password': 'SYS',
-        'logfile': 'log.txt'
-    }
+
     conn = iris.connect(**args)
     irispy = iris.createIRIS(conn)
 
@@ -52,14 +46,7 @@ def load_papers(csv_path="data/papers.csv"):
 
 def load_relations(csv_path="data/relations.csv"):
  
-    args = {
-        'hostname': '127.0.0.1',
-        'port': 1972,
-        'namespace': 'USER',
-        'username': '_SYSTEM',
-        'password': 'SYS',
-        'logfile': 'log.txt'
-    }
+   
     conn = iris.connect(**args)
     irispy = iris.createIRIS(conn)
 
@@ -82,7 +69,7 @@ def load_relations(csv_path="data/relations.csv"):
 
 def embed_and_load_papers(
     csv_path="data/papers_combined.csv",
-    conn_url="iris://_SYSTEM:SYS@localhost:1972/USER",
+    conn_url="iris://_SYSTEM:SYS@iris:1972/USER",
     model_name="all-MiniLM-L6-v2"
 ):
     df = pd.read_csv(csv_path)
@@ -101,7 +88,7 @@ def embed_and_load_papers(
     engine = create_engine(conn_url)
 
     create_sql = """
-        CREATE TABLE IF NOT EXISTS SQLUser.PAPER_CONTENT (
+        CREATE TABLE IF NOT EXISTS SQLUser.paper_content (
             docid VARCHAR(255),
             title VARCHAR(255),
             abstract VARCHAR(2000),
@@ -119,7 +106,7 @@ def embed_and_load_papers(
 
             for _, row in df.iterrows():
                 insert_sql = text("""
-                    INSERT INTO SQLUser.PAPER_CONTENT 
+                    INSERT INTO SQLUser.paper_content 
                     (docid, title, abstract, url, published, authors, combined, paper_vector) 
                     VALUES (:docid, :title, :abstract, :url, :published, :authors, :combined, TO_VECTOR(:paper_vector))
                 """)
@@ -139,7 +126,7 @@ def embed_and_load_papers(
 
 
 def create_vector_index(
-    conn_url="iris://_SYSTEM:SYS@localhost:1972/USER",
+    conn_url="iris://_SYSTEM:SYS@iris:1972/USER",
     table_name="paper_content",
     column_name="paper_vector",
     index_name="HNSWIndex"
@@ -164,34 +151,3 @@ if __name__ == "__main__":
     load_relations()
     embed_and_load_papers()
     create_vector_index()
-# args = {
-# 	'hostname':'127.0.0.1', 
-# 	'port': 1972,
-# 	'namespace':'USER', 
-# 	'username':'_SYSTEM', 
-# 	'password':'SYS',
-#     'logfile':'log.txt'
-    
-# }
-# conn = iris.connect(**args)
-
-# url = "iris://_SYSTEM:SYS@localhost:1972/USER"
-# engine = create_engine(url)
-
-# irispy = iris.createIRIS(conn)
-
-# with open("data/papers.csv", newline='',encoding='utf-8-sig') as csvfile:
-#                 reader = csv.DictReader(csvfile)
-#                 for row in reader:
-#                     docid = row['docid']
-#                     title = row['title']
-#                     abstract = row['abstract']
-#                     url = row['url']
-#                     published = row['published']
-#                     authors = row['authors']
-#                     irispy.set(title,    "GraphContent", docid, "title")
-#                     irispy.set(abstract, "GraphContent", docid, "abstract")
-#                     irispy.set(url,      "GraphContent", docid, "url")
-#                     irispy.set(published,      "GraphContent", docid, "published")
-
-#                     irispy.set(authors,  "GraphContent", docid, "authors")

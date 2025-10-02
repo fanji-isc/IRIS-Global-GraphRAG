@@ -7,8 +7,7 @@ services:
       target: final
     restart: always
     command: --check-caps false --ISCAgent false
-    # entrypoint: [ "/iris-main" ]
-    
+    hostname: iris
 
 
     ports:
@@ -46,7 +45,6 @@ services:
       - "8000:8000" 
     volumes:
       - ./app:/app
-      - ./data:/data:ro        # mount data separately
 
     environment:
       IRIS_HOST: iris
@@ -58,6 +56,4 @@ services:
       RELATIONS_CSV: /data/relations.csv
     depends_on:
       - iris
-    # command: >
-    #     sh -c "python data_load.py &&
-    #     python app.py"
+   
