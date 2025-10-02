@@ -1,4 +1,4 @@
-# IRIS-Global-GraphRAG
+# InterSystems IRIS GraphRAG
 GraphRAG with InterSystems IRIS — A research and demo project that loads academic papers and their relationships into InterSystems IRIS, builds embeddings, and enables semantic + graph-based retrieval using vector search and knowledge graph queries.
 # Introduction
 
@@ -59,15 +59,23 @@ User Question
 
 ```
 
-# Build & run
+# InterSystems IRIS GraphRAG Quickstart
+     1. Clone the repo
 
-Add your own OPEN AI key to .env file
+    ```Shell
+          git clone https://github.com/fanji-isc/IRIS-Global-GraphRAG.git
+    ```
+     2. Add your own OPEN AI key to .env file in app/
 
-Then run 
-```bash
-docker compose up 
-```
+     ```Shell
+          OPENAI_API_KEY=sk-...
+     ```
+     3. Start the Docker containers (one for IRIS, one for Flask):
 
-Demo: http://localhost:8000
+     ```Shell
+          docker compose up --build
+     ```
+     4. Open the app & IRIS
+          Demo: http://localhost:8000
 
-IRIS Portal: http://localhost:52773
+          IRIS Portal: http://localhost:52773
