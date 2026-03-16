@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
+from collections import Counter
 import os
 
 from iris_db import (
@@ -73,7 +74,7 @@ def api_ask():
 
     try:
         answer = ask_question_rag(query, _engine, _emb_model, top_k=top_k)
-        return jsonify({"answer": answer})
+        return jsonify({"answer": answer, "meta": {"paper_count": top_k}})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -217,11 +218,20 @@ def api_graphrag():
         content = get_content_for_docs(doc_ids_for_graph, _irispy)
         refs = [{"doc_id": c.get("doc_id"), "title": c.get("title"), "url": c.get("url")} for c in content]
 
+        type_counts = Counter(n.get("type", "unknown") for n in merged_graph.get("nodes", []))
+
         return jsonify({
             "answer": answer,
             "doc_ids": doc_ids_for_graph,
             "papers": refs,
-            "graph": merged_graph
+            "graph": merged_graph,
+            "method": agent_out.get("method", "graph_general"),
+            "meta": {
+                "paper_count": len(doc_ids_for_graph),
+                "node_count":  len(merged_graph.get("nodes", [])),
+                "edge_count":  len(merged_graph.get("links", [])),
+                "by_type":     dict(type_counts),
+            }
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500

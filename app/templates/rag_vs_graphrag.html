@@ -12,10 +12,17 @@
   <div class="wrap">
     <h1>RAG vs GraphRAG</h1>
 
+    <div class="chip-label">Try a demo question:</div>
+    <div class="chips" id="chips">
+      <button class="chip" data-q="Who are the top authors in GraphRAG research?">Who are the top authors in GraphRAG research?</button>
+      <button class="chip" data-q="What topics connect the most papers in this graph?">What topics connect the most papers?</button>
+      <button class="chip" data-q="How does GraphRAG improve over traditional RAG systems?">How does GraphRAG improve over RAG?</button>
+    </div>
+
     <div class="card" style="margin-bottom:16px;">
       <div class="section-body">
         <div class="inputbar">
-          <input id="q" type="text" autocomplete="off"  placeholder="Ask one question to compare answers…" />
+          <input id="q" type="text" autocomplete="off" placeholder="Ask one question to compare answers…" />
           <button id="go">Compare</button>
         </div>
       </div>
@@ -23,20 +30,31 @@
 
     <!-- Results are hidden until a search starts -->
     <div id="results" class="cols hidden">
-      <div class="card">
-        <div class="section-title">RAG</div>
+      <!-- RAG card -->
+      <div class="card rag-card">
+        <div class="section-title rag-title">
+          <div>
+            <div class="method-name">RAG</div>
+          </div>
+        </div>
         <div class="section-body">
           <div id="rag" class="answer">—</div>
+          <div id="rag-meta" class="meta-row hidden"></div>
         </div>
       </div>
-      <div class="card">
-        <div class="section-title">
-          GraphRAG
-          <!-- === Added button (disabled until graph arrives) === -->
+      <!-- GraphRAG card -->
+      <div class="card gr-card">
+        <div class="section-title gr-title">
+          <div>
+            <div class="method-name">GraphRAG</div>
+          </div>
           <button id="show-graph" class="mini-btn" disabled>Show Graph</button>
         </div>
         <div class="section-body">
           <div id="gr" class="answer">—</div>
+          <div id="gr-meta" class="meta-row hidden"></div>
+          <div id="gr-entities" class="entity-pills hidden"></div>
+          <div id="gr-sources" class="sources-section hidden"></div>
         </div>
       </div>
     </div>
@@ -78,16 +96,51 @@
     const q       = document.getElementById('q');
     const go      = document.getElementById('go');
     const results = document.getElementById('results');
-    const ragEl   = document.getElementById('rag');
-    const grEl    = document.getElementById('gr');
+    const ragEl       = document.getElementById('rag');
+    const grEl        = document.getElementById('gr');
+    const ragMetaEl   = document.getElementById('rag-meta');
+    const grMetaEl    = document.getElementById('gr-meta');
+    const grEntitiesEl = document.getElementById('gr-entities');
+    const grSourcesEl  = document.getElementById('gr-sources');
 
-    // === Added: show-graph button + modal refs ===
+    // === show-graph button + modal refs ===
     const showBtn     = document.getElementById('show-graph');
     const modal       = document.getElementById('graph-modal');
     const closeModal  = document.getElementById('close-modal');
     const graph3dEl   = document.getElementById('graph3d');
     let LAST_GRAPH = null;
     let Graph3D = null;
+    let graphInited = false;
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function renderInline(s) {
+      s = escHtml(s);
+      s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+    function renderAnswer(el, text) {
+      if (!text) { el.textContent = '(no answer)'; return; }
+      const lines = text.split('\n');
+      let html = '';
+      let inList = false;
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
+        if (line.startsWith('- ') || line.startsWith('• ')) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += `<li>${renderInline(line.slice(2))}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<p>${renderInline(line)}</p>`;
+        }
+      }
+      if (inList) html += '</ul>';
+      el.innerHTML = html;
+    }
 
     // typing indicator helpers (unchanged)
     function createTypingNode() {
@@ -110,7 +163,6 @@
       }
     }
 
-    // === Added: modal open/close + render ===
     function openGraphModal(graph) {
       if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
         alert('No graph to display yet.');
@@ -118,34 +170,40 @@
       }
       modal.classList.add('open');
 
-      // (re)init renderer after modal is visible
-      setTimeout(() => {
-        graph3dEl.innerHTML = '';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        try {
+          if (!graphInited) {
+            const mc = modal.querySelector('.modal-content');
+            const W = mc.offsetWidth;
+            const H = mc.offsetHeight;
+            const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
+            const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
 
-        const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
-        const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
+            Graph3D = ForceGraph3D()(graph3dEl)
+              .width(W).height(H)
+              .nodeColor(n => colorFor(n.type))
+              .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
+              .linkColor(() => '#4b5563')
+              .linkOpacity(0.4);
 
-        Graph3D = ForceGraph3D()(graph3dEl)
-          .nodeColor(n => colorFor(n.type))
-          .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
-          .linkColor(() => '#4b5563')
-          .linkOpacity(0.4);
-
-        const controls = Graph3D.controls && Graph3D.controls();
-        if (controls) {
-          controls.autoRotate = false;
-          controls.enableDamping = true;
-          controls.dampingFactor = 0.05;
+            const controls = Graph3D.controls && Graph3D.controls();
+            if (controls) {
+              controls.autoRotate = false;
+              controls.enableDamping = true;
+              controls.dampingFactor = 0.05;
+            }
+            graphInited = true;
+          }
+          if (Graph3D.resumeAnimation) Graph3D.resumeAnimation();
+          Graph3D.graphData(graph);
+        } catch(e) {
+          graph3dEl.innerHTML = '<div style="color:#f87171;padding:24px;font-size:14px;">Error: ' + e.message + '</div>';
         }
-
-        Graph3D.graphData(graph);
-      }, 30);
+      }));
     }
     function closeGraph() {
       modal.classList.remove('open');
-      // basic cleanup
-      graph3dEl.innerHTML = '';
-      Graph3D = null;
+      if (Graph3D && Graph3D.pauseAnimation) Graph3D.pauseAnimation();
     }
     closeModal.addEventListener('click', closeGraph);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeGraph(); });
@@ -156,12 +214,13 @@
       if (!query) return;
       go.disabled = true;
 
-      // reveal results section and show typing in both panes
       results.classList.remove('hidden');
       startTyping(ragEl);
       startTyping(grEl);
-
-      // === Added: reset graph state/button ===
+      ragMetaEl.classList.add('hidden');   ragMetaEl.innerHTML = '';
+      grMetaEl.classList.add('hidden');    grMetaEl.innerHTML = '';
+      grEntitiesEl.classList.add('hidden'); grEntitiesEl.innerHTML = '';
+      grSourcesEl.classList.add('hidden');  grSourcesEl.innerHTML = '';
       LAST_GRAPH = null;
       showBtn.disabled = true;
 
@@ -180,10 +239,14 @@
       try {
         const [ragRes, grRes] = await Promise.allSettled([ragReq, grReq]);
 
-        // RAG pane (unchanged)
+        // ── RAG result ──
         stopTyping(ragEl);
         if (ragRes.status === 'fulfilled' && !ragRes.value.error) {
-          ragEl.textContent = ragRes.value.answer || '(no answer)';
+          renderAnswer(ragEl, ragRes.value.answer);
+          if (ragRes.value.meta) {
+            ragMetaEl.innerHTML = `<span class="meta-tag rag">📄 ${ragRes.value.meta.paper_count} text chunks retrieved</span>`;
+            ragMetaEl.classList.remove('hidden');
+          }
         } else {
           const msg = ragRes.status === 'fulfilled'
             ? (ragRes.value.error || 'Unknown error')
@@ -191,11 +254,51 @@
           ragEl.textContent = 'Error: ' + msg;
         }
 
-        // GraphRAG pane + store graph for modal
+        // ── GraphRAG result ──
         stopTyping(grEl);
         if (grRes.status === 'fulfilled' && !grRes.value.error) {
-          grEl.textContent = grRes.value.answer || '(no answer)';
-          LAST_GRAPH = grRes.value.graph || null;
+          const gd = grRes.value;
+          renderAnswer(grEl, gd.answer);
+
+          // meta badges — break down by node type
+          if (gd.meta) {
+            const bt = gd.meta.by_type || {};
+            const pc = bt.paper  != null ? bt.paper  : gd.meta.paper_count;
+            const tc = bt.topic  || 0;
+            const ac = bt.author || 0;
+            let metaHtml = `<span class="meta-tag gr">📄 ${pc} papers</span>`;
+            if (tc) metaHtml += `<span class="meta-tag gr">🏷 ${tc} topics</span>`;
+            if (ac) metaHtml += `<span class="meta-tag gr">👤 ${ac} authors</span>`;
+            metaHtml += `<span class="meta-tag gr">↔ ${gd.meta.edge_count} edges</span>`;
+            grMetaEl.innerHTML = metaHtml;
+            grMetaEl.classList.remove('hidden');
+          }
+
+          // entity pills — topics and authors from graph nodes
+          const nodes = (gd.graph || {}).nodes || [];
+          const topics  = [...new Set(nodes.filter(n => n.type === 'topic').map(n => n.id))].slice(0, 8);
+          const authors = [...new Set(nodes.filter(n => n.type === 'author').map(n => n.id))].slice(0, 5);
+          if (topics.length || authors.length) {
+            grEntitiesEl.innerHTML =
+              topics.map(t  => `<span class="entity-pill topic">🏷 ${t}</span>`).join('') +
+              authors.map(a => `<span class="entity-pill author">👤 ${a}</span>`).join('');
+            grEntitiesEl.classList.remove('hidden');
+          }
+
+          // sources list — paper titles with links
+          const papersArr = gd.papers || [];
+          if (papersArr.length) {
+            grSourcesEl.innerHTML = '<div class="sources-label">Sources used by GraphRAG</div>' +
+              papersArr.map(p => {
+                const title = p.title || `Paper #${p.doc_id}`;
+                return p.url
+                  ? `<a class="source-link" href="${p.url}" target="_blank" rel="noopener">↗ ${title}</a>`
+                  : `<span class="source-link no-url">· ${title}</span>`;
+              }).join('');
+            grSourcesEl.classList.remove('hidden');
+          }
+
+          LAST_GRAPH = gd.graph || null;
           const hasGraph = LAST_GRAPH && Array.isArray(LAST_GRAPH.nodes) && LAST_GRAPH.nodes.length > 0;
           showBtn.disabled = !hasGraph;
         } else {
@@ -211,7 +314,16 @@
       }
     }
 
-    // Settings switcher (unchanged)
+    document.getElementById('chips').addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      q.value = chip.dataset.q;
+      run();
+    });
+
+    go.addEventListener('click', run);
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+
     (function setupSettingsSwitcher(){
       const toggle = document.getElementById('settings-toggle');
       const menu   = document.getElementById('settings-menu');
@@ -248,9 +360,6 @@
         if (selected && selected.value) window.location.href = selected.value;
       });
     })();
-
-    go.addEventListener('click', run);
-    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
   </script>
 </body>
 </html>

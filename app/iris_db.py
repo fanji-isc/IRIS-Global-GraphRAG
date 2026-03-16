@@ -3,6 +3,7 @@ from sqlalchemy import create_engine,text
 import config as cfg
 from openai import OpenAI
 import os
+import re
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 import json
@@ -95,20 +96,81 @@ def send_to_llm(messages, **kwargs):
     return completion
 
 
+def format_graph_context(combined_results: dict) -> str:
+    """Format combined graph results into readable structured text for the LLM."""
+    papers = combined_results.get("papers", [])
+    graphs = combined_results.get("graphs", [])
+    graph_by_id = {int(g["doc_id"]): g for g in graphs}
+
+    sections = []
+    for p in papers:
+        doc_id = int(p.get("doc_id", 0))
+        parts = []
+        if p.get("title"):
+            parts.append(f'Title: "{p["title"]}"')
+        if p.get("authors"):
+            parts.append(f"Authors: {p['authors']}")
+        if p.get("published"):
+            parts.append(f"Published: {p['published']}")
+        if p.get("abstract"):
+            parts.append(f"Abstract: {p['abstract'][:500]}")
+
+        g = graph_by_id.get(doc_id)
+        if g:
+            topics = [n["name"] for n in g.get("nodes", []) if n.get("type") == "topic"]
+            if topics:
+                parts.append(f"Topics covered: {', '.join(topics)}")
+            edges = g.get("edges", [])
+            if edges:
+                rel_strs = [
+                    f"    {e['source']} --[{e.get('relation', '')}]--> {e['target']}"
+                    for e in edges[:10]
+                ]
+                parts.append("Graph relations:\n" + "\n".join(rel_strs))
+
+        sections.append("\n".join(parts))
+
+    return "\n\n---\n\n".join(sections)
+
+
+def fix_bullet_lines(lines):
+    """Split lines where the LLM packed multiple ' - ' items onto one line."""
+    result = []
+    for line in lines:
+        if line.startswith('- '):
+            result.append(line)
+        elif ' - ' in line:
+            parts = [p.strip() for p in line.split(' - ') if p.strip()]
+            for part in parts:
+                result.append('- ' + part)
+        else:
+            result.append(line)
+    return result
+
+
 def llm_answer_rag(batch, query, cutoff=True):
- 
 
-    prompt_text = """You are an expert assistant for graph-based academic search. 
-    You are given a graph context of academic papers including authors, abstracts, published date.
-    Use the following pieces of retrieved context from the database to answer the question.
-    """ + (("Use three sentences maximum and keep the answer concise.") if cutoff else " ") + """
-    Question: {question}  
-    Context: {context}
-    Answer:
-    """
+    prompt_text = (
+        "You are a research assistant. Answer the question using ONLY the text passages "
+        "retrieved by semantic similarity search below.\n"
+        "IMPORTANT LIMITATION: You only have access to flat text snippets. You have NO knowledge "
+        "of graph structure, topic connections, paper relationships, citation links, or which "
+        "topics appear in the most papers. If the question asks about graph structure or "
+        "connections between papers/topics/authors, respond with a single bullet: "
+        "'- RAG cannot answer this — it has no graph structure, only flat text snippets.'\n"
+        "STRICT FORMAT RULES:\n"
+        "  - Use bullet points only. Every bullet starts with '- ' on its OWN LINE.\n"
+        "  - Never put two bullets on the same line.\n"
+        "  - Never write a prose paragraph.\n"
+        "  - If listing papers: format each as: - Title (year) — First Author et al.\n"
+        "  - If explaining concepts: one bullet per key point.\n"
+        "Do not invent author names, paper titles, or relationships not present in the text.\n\n"
+        "Question: {question}\n\n"
+        "Retrieved text passages:\n{context}\n\n"
+        "Answer:"
+    )
 
-
-    prompt = prompt_text.format(**{"question": query, "context": batch})
+    prompt = prompt_text.format(question=query, context=batch)
  
     messages = [
             {
@@ -120,16 +182,26 @@ def llm_answer_rag(batch, query, cutoff=True):
     completion = send_to_llm(messages)
     response = completion.choices[0].message.content
     answer_lines = [line.strip() for line in response.split('\n') if line.strip()]
-    return answer_lines
+    return fix_bullet_lines(answer_lines)
 
+
+_GRAPH_STRUCTURAL_RE = re.compile(
+    r'\b(connect|connects|most papers|most connected|topic.*graph|graph.*topic'
+    r'|which topic|what topic|top topic|central topic'
+    r'|link.*paper|paper.*link|graph structure|graph relation)\b',
+    re.IGNORECASE,
+)
 
 def ask_question_rag(query: str, engine, emb_model, top_k: int = 5):
+
+    if _GRAPH_STRUCTURAL_RE.search(query):
+        return "- RAG cannot answer this — it only has flat text snippets with no knowledge of graph structure, topic connections, or which topics link the most papers."
 
     search_vector = emb_model.encode(query, normalize_embeddings=True).tolist()
     results = search_papers(engine, search_vector, top_k)
     response = llm_answer_rag(results, query, True)
     if isinstance(response, list):
-        response = " ".join(response)
+        response = "\n".join(response)
     return response
 
 
@@ -183,19 +255,31 @@ def get_content_for_docs(doc_ids, irispy, global_name="^GraphContent"):
 
 
 def llm_answer_graphrag(batch, query, cutoff=True):
- 
 
-    prompt_text = """You are an expert assistant for graph-based academic search. 
-    You are given a graph context of academic papers including authors, abstracts, published date.
-    Use the following pieces of retrieved context from a graph database to answer the question.
-    """ + (("Use three sentences maximum and keep the answer concise.") if cutoff else " ") + """
-    Question: {question}  
-    Graph Context: {graph_context}
-    Answer:
-    """
+    # Format raw combined_results dict into clean readable text
+    if isinstance(batch, dict):
+        graph_context = format_graph_context(batch)
+    else:
+        graph_context = str(batch)
 
+    prompt_text = (
+        "You are a research assistant with access to a structured academic knowledge graph.\n"
+        "Each paper is linked to its authors (AUTHORED relation) and the topics it covers (COVERS relation).\n"
+        "STRICT FORMAT RULES:\n"
+        "  - Use bullet points only. Every bullet starts with '- ' on its OWN LINE.\n"
+        "  - Never put two bullets on the same line.\n"
+        "  - Never write a prose paragraph.\n"
+        "  - If listing papers: format each as: - Title (year) — First Author et al.\n"
+        "  - If listing authors: format each as: - Author Name (N papers)\n"
+        "  - If explaining concepts/improvements: one bullet per key point; "
+        "cite a paper in parentheses only when directly relevant.\n"
+        "\nQuestion: {question}\n\n"
+        "Knowledge graph context (papers, authors, topics, and their relations):\n"
+        "{graph_context}\n\n"
+        "Answer:"
+    )
 
-    prompt = prompt_text.format(**{"question": query, "graph_context": batch})
+    prompt = prompt_text.format(question=query, graph_context=graph_context)
  
     messages = [
             {
@@ -208,10 +292,7 @@ def llm_answer_graphrag(batch, query, cutoff=True):
     response = completion.choices[0].message.content
  
     answer_lines = [line.strip() for line in response.split('\n') if line.strip()]
-
-
-
-    return answer_lines
+    return fix_bullet_lines(answer_lines)
 
 def prepare_combined_results(query, engine, emb_model, iris_handle, top_k=5):
     search_vector = emb_model.encode(query, normalize_embeddings=True).tolist()
@@ -382,6 +463,28 @@ def get_top_authors_by_paper_count(
     return items[:max(1, int(limit))]
 
 
+def get_top_topics_by_paper_count(
+    irispy,
+    limit: int = 10,
+    relations_global: str = "^GraphRelations",
+    edge_root: str = "Edge",
+    covers_value: str = "COVERS",
+):
+    """Count how many distinct papers cover each topic and return the top N."""
+    topic_doc_ids = {}
+
+    for doc_id, _ in irispy.iterator(relations_global):
+        for src, _ in irispy.iterator(relations_global, doc_id, edge_root):
+            for dst, rel in irispy.iterator(relations_global, doc_id, edge_root, src):
+                if str(rel).upper() != covers_value.upper():
+                    continue
+                topic = str(dst)
+                topic_doc_ids.setdefault(topic, set()).add(int(doc_id))
+
+    ranked = sorted(topic_doc_ids.items(), key=lambda x: len(x[1]), reverse=True)
+    return [{"topic": t, "paper_count": len(ids)} for t, ids in ranked[:max(1, int(limit))]]
+
+
 tools = [
     {
         "type": "function",
@@ -427,16 +530,32 @@ tools = [
             }
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_top_topics_by_paper_count",
+            "description": "Return the top topics ranked by how many papers cover them. Use this for questions about which topics appear most, connect the most papers, or are most common in the graph.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "limit": {"type": "integer", "default": 10, "minimum": 1, "maximum": 100}
+                },
+                "required": []
+            }
+        },
+    },
 ]
 
 # -------- routing instruction --------
 ROUTER_SYSTEM = (
     "You are a routing assistant for a graph-of-papers. "
     "Choose and call the correct tool(s). Examples:\n"
-    "- 'who has written the most paper' -> call get_top_authors_by_paper_count(limit=5)\n"
+    "- 'who has written the most papers' -> call get_top_authors_by_paper_count(limit=5)\n"
     "- 'what did Harry Shomer write' -> call get_papers_by_author(author='Harry Shomer')\n"
     "- 'papers about Knowledge Graphs' -> call get_papers_by_topic(topic='Knowledge Graphs')\n"
-    "After tool results come back, summarize concisely."
+    "- 'what topics connect the most papers' -> call get_top_topics_by_paper_count(limit=10)\n"
+    "- 'which topics appear most in the graph' -> call get_top_topics_by_paper_count(limit=10)\n"
+    "After tool results come back, format your answer as a bulleted list (- item per topic or author)."
 )
 
 ##safe version
@@ -561,6 +680,8 @@ def run_agent(user_query, irispy, limit_default=5, debug=True, return_context=Fa
             result = get_papers_by_author(args["author"], irispy, include_content=bool(args.get("include_content", True)))
         elif name == "get_papers_by_topic":
             result = get_papers_by_topic(irispy, args["topic"], include_content=bool(args.get("include_content", True)))
+        elif name == "get_top_topics_by_paper_count":
+            result = get_top_topics_by_paper_count(irispy, limit=int(args.get("limit", 10)))
         else:
             result = {"error": f"unknown tool {name}"}
         last_tool, last_payload = name, result
@@ -607,18 +728,71 @@ def run_agent(user_query, irispy, limit_default=5, debug=True, return_context=Fa
     return "Agent stopped: max steps reached."
 
 
+_AGGREGATION_RE = re.compile(
+    r'\b(top|most|least|how many|count|number of|rank|who has the most|'
+    r'who have the most|list all|which .* most|highest|lowest|best|worst)\b',
+    re.IGNORECASE
+)
+
+_COMPARISON_RE = re.compile(
+    r'\b(improve|improvement|better|advantage|benefit|differ|difference|'
+    r'compare|comparison|over rag|vs rag|versus rag|over traditional|'
+    r'graphrag.*rag|rag.*graphrag)\b',
+    re.IGNORECASE
+)
+
 def classify_query_llm(user_query: str) -> str:
-    messages = [
-        {"role": "system", "content": (
-            "Classify the user's question as exactly one word: "
-            "'aggregation' (asks for counts, most/least, top, number of) "
-            "or 'general' (everything else). Reply with only that word."
-        )},
-        {"role": "user", "content": user_query}
-    ]
-    resp = send_to_llm(messages)  # uses your wrapper
-    label = (resp.choices[0].message.content or "").strip().lower()
-    return "aggregation" if "aggregation" in label else "general"
+    """Keyword-based classifier — no LLM call needed."""
+    if _COMPARISON_RE.search(user_query):
+        return "comparison"
+    return "aggregation" if _AGGREGATION_RE.search(user_query) else "general"
+
+
+def graphrag_vs_rag_answer(irispy) -> str:
+    """
+    Pull real graph statistics and synthesise a concrete comparison answer
+    that highlights what GraphRAG can do that RAG cannot.
+    """
+    topics = get_top_topics_by_paper_count(irispy, limit=5)
+    authors = get_top_authors_by_paper_count(irispy, limit=3)
+
+    # Count total nodes and edges across the whole graph
+    total_papers = 0
+    total_edges = 0
+    for doc_id, _ in irispy.iterator("^GraphRelations"):
+        total_papers += 1
+        for src, _ in irispy.iterator("^GraphRelations", doc_id, "Edge"):
+            for dst, _ in irispy.iterator("^GraphRelations", doc_id, "Edge", src):
+                total_edges += 1
+
+    top_topics_str = ", ".join(
+        f"{t['topic']} ({t['paper_count']} papers)" for t in topics
+    )
+    top_authors_str = ", ".join(
+        f"{a['author']} ({a['count']} papers)" for a in authors
+    )
+
+    prompt = (
+        "You are a research assistant. Explain how GraphRAG improves over traditional RAG.\n"
+        "Use the REAL graph statistics below to make the answer concrete and specific.\n"
+        "STRICT FORMAT RULES:\n"
+        "  - Use bullet points only. Every bullet starts with '- ' on its OWN LINE.\n"
+        "  - Never put two bullets on the same line. Never write a prose paragraph.\n"
+        "  - Each bullet should be a distinct advantage of GraphRAG over RAG.\n"
+        "  - Weave in the real numbers and topic/author names to show graph power.\n\n"
+        f"Real graph statistics from the knowledge graph:\n"
+        f"  - {total_papers} papers indexed as graph nodes with {total_edges} relationships\n"
+        f"  - Top topics by paper coverage: {top_topics_str}\n"
+        f"  - Most prolific authors: {top_authors_str}\n\n"
+        "Question: How does GraphRAG improve over traditional RAG systems?\n\n"
+        "Answer (bullet points, each on its own line):"
+    )
+
+    messages = [{"role": "user", "content": prompt}]
+    completion = send_to_llm(messages)
+    response = completion.choices[0].message.content
+    lines = [line.strip() for line in response.split('\n') if line.strip()]
+    return "\n".join(fix_bullet_lines(lines))
 ##safe version
 # def ask_question_graphrag_agent(
 #     user_query: str,
@@ -693,9 +867,18 @@ def ask_question_graphrag_agent(
     if debug:
         print(f"[Router] classified as: {qtype}")
 
+    if qtype == "comparison":
+        ans = graphrag_vs_rag_answer(irispy)
+        if return_context:
+            return {"answer": ans, "doc_ids": [], "method": "comparison"}
+        return ans
+
     if qtype == "aggregation":
         ctx = run_agent(user_query, irispy, debug=debug, return_context=True)
-        return ctx if return_context else ctx["answer"]
+        if return_context:
+            ctx["method"] = "agent"
+            return ctx
+        return ctx["answer"]
 
     if combined_results is None:
         if engine is None or emb_model is None:
@@ -704,10 +887,10 @@ def ask_question_graphrag_agent(
 
     ans = llm_answer_graphrag(combined_results, user_query, True)
     if isinstance(ans, list):
-        ans = " ".join(ans)
+        ans = "\n".join(ans)
 
     if return_context:
-        return {"answer": ans, "doc_ids": combined_results.get("doc_ids", [])}
+        return {"answer": ans, "doc_ids": combined_results.get("doc_ids", []), "method": "graph_general"}
     return ans
 
 

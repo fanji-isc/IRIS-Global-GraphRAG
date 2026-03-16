@@ -4,19 +4,23 @@
   <meta charset="utf-8" />
   <title>LLM vs RAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
   <div class="wrap">
     <h1>LLM vs RAG</h1>
 
+    <div class="chip-label">Try a demo question:</div>
+    <div class="chips" id="chips">
+      <button class="chip" data-q="What is RAG?">What is RAG?</button>
+      <button class="chip" data-q="Who are the main researchers working on retrieval-augmented generation?">Key RAG researchers?</button>
+      <button class="chip" data-q="What papers were published about GraphRAG in 2024?">Papers about GraphRAG in 2024?</button>
+    </div>
+
     <div class="card" style="margin-bottom:16px;">
       <div class="section-body">
         <div class="inputbar">
-          <input id="q" type="text" autocomplete="off" placeholder="Ask one question to compare answers…" />
+          <input id="q" type="text" autocomplete="off" placeholder="Ask about a specific paper, method, or acronym…" />
           <button id="go">Compare</button>
         </div>
       </div>
@@ -24,42 +28,89 @@
 
     <!-- Results are hidden until a search starts -->
     <div id="results" class="cols hidden">
-      <div class="card">
-        <div class="section-title">LLM Alone</div>
-        <div class="section-body"><div id="llm" class="answer"></div></div>
+      <!-- LLM card -->
+      <div class="card llm-card">
+        <div class="section-title llm-title">
+          <div>
+            <div class="method-name">LLM Alone</div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div id="llm" class="answer"></div>
+          <div id="llm-meta" class="meta-row hidden"></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="section-title">RAG</div>
-        <div class="section-body"><div id="rag" class="answer"></div></div>
+      <!-- RAG card -->
+      <div class="card rag-card">
+        <div class="section-title rag-title">
+          <div>
+            <div class="method-name">RAG</div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div id="rag" class="answer"></div>
+          <div id="rag-meta" class="meta-row hidden"></div>
+        </div>
       </div>
     </div>
 
-      <!-- Settings switcher -->
-  <div class="settings-wrapper" id="settings">
-    <button class="settings-toggle" id="settings-toggle" title="Switch page">⚙️</button>
-    <div class="settings-menu" id="settings-menu" role="dialog" aria-hidden="true">
-      <form id="settings-form">
-        <h4>Go to</h4>
-        <label><input type="radio" name="mode" value="/llm"> LLM</label>
-        <label><input type="radio" name="mode" value="/rag"> RAG</label>
-        <label><input type="radio" name="mode" value="/graphrag"> GraphRAG</label>
-        <label><input type="radio" name="mode" value="/llm-vs-rag"> LLM vs RAG</label>
-        <label><input type="radio" name="mode" value="/rag-vs-graphrag"> RAG vs GraphRAG</label>
-        <button type="submit" class="go-btn">Go</button>
-      </form>
+    <!-- Settings switcher -->
+    <div class="settings-wrapper" id="settings">
+      <button class="settings-toggle" id="settings-toggle" title="Switch page">⚙️</button>
+      <div class="settings-menu" id="settings-menu" role="dialog" aria-hidden="true">
+        <form id="settings-form">
+          <h4>Go to</h4>
+          <label><input type="radio" name="mode" value="/llm"> LLM</label>
+          <label><input type="radio" name="mode" value="/rag"> RAG</label>
+          <label><input type="radio" name="mode" value="/graphrag"> GraphRAG</label>
+          <label><input type="radio" name="mode" value="/llm-vs-rag"> LLM vs RAG</label>
+          <label><input type="radio" name="mode" value="/rag-vs-graphrag"> RAG vs GraphRAG</label>
+          <button type="submit" class="go-btn">Go</button>
+        </form>
+      </div>
     </div>
-  </div>
 
   </div>
 
   <script>
-    const q        = document.getElementById('q');
-    const go       = document.getElementById('go');
-    const results  = document.getElementById('results');
-    const llm      = document.getElementById('llm');
-    const rag      = document.getElementById('rag');
+    const q       = document.getElementById('q');
+    const go      = document.getElementById('go');
+    const results = document.getElementById('results');
+    const llmEl       = document.getElementById('llm');
+    const ragEl       = document.getElementById('rag');
+    const llmMetaEl   = document.getElementById('llm-meta');
+    const ragMetaEl   = document.getElementById('rag-meta');
 
-    // typing indicator helpers
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function renderInline(s) {
+      s = escHtml(s);
+      s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+    function renderAnswer(el, text) {
+      if (!text) { el.textContent = '(no answer)'; return; }
+      const lines = text.split('\n');
+      let html = '';
+      let inList = false;
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
+        if (line.startsWith('- ') || line.startsWith('• ')) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += `<li>${renderInline(line.slice(2))}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<p>${renderInline(line)}</p>`;
+        }
+      }
+      if (inList) html += '</ul>';
+      el.innerHTML = html;
+    }
+
     function createTypingNode() {
       const wrap = document.createElement('div');
       wrap.className = 'typing';
@@ -85,10 +136,11 @@
       if (!query) return;
       go.disabled = true;
 
-      // reveal results section and show typing in both panes
       results.classList.remove('hidden');
-      startTyping(llm);
-      startTyping(rag);
+      startTyping(llmEl);
+      startTyping(ragEl);
+      llmMetaEl.classList.add('hidden');   llmMetaEl.innerHTML = '';
+      ragMetaEl.classList.add('hidden');   ragMetaEl.innerHTML = '';
 
       const llmReq = fetch('/api/llm', {
         method: 'POST',
@@ -105,32 +157,48 @@
       try {
         const [llmRes, ragRes] = await Promise.allSettled([llmReq, ragReq]);
 
-        stopTyping(llm);
+        // ── LLM result ──
+        stopTyping(llmEl);
         if (llmRes.status === 'fulfilled' && !llmRes.value.error) {
-          llm.textContent = llmRes.value.answer || '(no answer)';
+          renderAnswer(llmEl, llmRes.value.answer);
+          llmMetaEl.innerHTML = '<span class="meta-tag llm">⚡ No retrieval — parametric only</span>';
+          llmMetaEl.classList.remove('hidden');
         } else {
           const msg = llmRes.status === 'fulfilled'
             ? (llmRes.value.error || 'Unknown error')
             : (llmRes.reason?.message || 'Network error');
-          llm.textContent = 'Error: ' + msg;
+          llmEl.textContent = 'Error: ' + msg;
         }
 
-        stopTyping(rag);
+        // ── RAG result ──
+        stopTyping(ragEl);
         if (ragRes.status === 'fulfilled' && !ragRes.value.error) {
-          rag.textContent = ragRes.value.answer || '(no answer)';
+          renderAnswer(ragEl, ragRes.value.answer);
+          if (ragRes.value.meta) {
+            ragMetaEl.innerHTML = `<span class="meta-tag rag">📄 ${ragRes.value.meta.paper_count} text chunks retrieved</span>`;
+            ragMetaEl.classList.remove('hidden');
+          }
         } else {
           const msg = ragRes.status === 'fulfilled'
             ? (ragRes.value.error || 'Unknown error')
             : (ragRes.reason?.message || 'Network error');
-          rag.textContent = 'Error: ' + msg;
+          ragEl.textContent = 'Error: ' + msg;
         }
       } finally {
         go.disabled = false;
       }
     }
 
+    document.getElementById('chips').addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      q.value = chip.dataset.q;
+      run();
+    });
 
-    // Settings switcher
+    go.addEventListener('click', run);
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+
     (function setupSettingsSwitcher(){
       const toggle = document.getElementById('settings-toggle');
       const menu   = document.getElementById('settings-menu');
@@ -167,8 +235,6 @@
         if (selected && selected.value) window.location.href = selected.value;
       });
     })();
-    go.addEventListener('click', run);
-    q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
   </script>
 </body>
 </html>

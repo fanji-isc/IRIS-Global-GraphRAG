@@ -13,6 +13,13 @@
   <div class="wrap">
     <h1>GraphRAG</h1>
 
+    <div class="chip-label">Try a demo question:</div>
+    <div class="chips" id="chips">
+      <button class="chip" data-q="Who are the most prolific authors in this research graph?">Most prolific authors?</button>
+      <button class="chip" data-q="What are the top research topics covered across all papers?">Top research topics?</button>
+      <button class="chip" data-q="How does GraphRAG improve over traditional RAG systems?">GraphRAG vs RAG?</button>
+    </div>
+
     <div class="card" style="margin-bottom:16px;">
       <div class="section-body">
         <div class="inputbar">
@@ -31,6 +38,7 @@
       </div>
       <div class="section-body">
         <div id="answer" class="answer"></div>
+        <div id="gr-sources" class="sources-section hidden"></div>
       </div>
     </div>
   </div>
@@ -73,8 +81,41 @@
     const closeModal = document.getElementById('close-modal');
     const graph3dEl = document.getElementById('graph3d');
 
+    const grSourcesEl = document.getElementById('gr-sources');
+
     let LAST_GRAPH = null;
     let Graph3D = null;
+    let graphInited = false;
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function renderInline(s) {
+      s = escHtml(s);
+      s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+    function renderAnswer(el, text) {
+      if (!text) { el.textContent = '(no answer)'; return; }
+      const lines = text.split('\n');
+      let html = '';
+      let inList = false;
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
+        if (line.startsWith('- ') || line.startsWith('• ')) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += `<li>${renderInline(line.slice(2))}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<p>${renderInline(line)}</p>`;
+        }
+      }
+      if (inList) html += '</ul>';
+      el.innerHTML = html;
+    }
 
     // typing dots
     function createTypingNode() {
@@ -97,54 +138,6 @@
       }
     }
 
-    // Open/close modal with 3D graph
-    // function openGraphModal(graph) {
-    //   if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
-    //     alert('No graph to display yet.');
-    //     return;
-    //   }
-    //   modal.classList.add('open');
-
-    //   // render after modal is visible
-    //   setTimeout(() => {
-    //     graph3dEl.innerHTML = '';
-
-    //     const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
-    //     const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
-
-    //     Graph3D = ForceGraph3D()(graph3dEl)
-    //       .nodeColor(n => colorFor(n.type))
-    //       .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
-    //       .linkColor(() => '#4b5563')
-    //       .linkOpacity(0.4);
-
-    //     // Enable nice orbit controls (left-drag background to rotate)
-    //     if (Graph3D.controls) {
-    //       const controls = Graph3D.controls();
-    //       controls.autoRotate = false;
-    //       controls.enableRotate = true;
-    //       controls.enablePan = true;
-    //       controls.enableZoom = true;
-    //       controls.enableDamping = true;
-    //       controls.dampingFactor = 0.05;
-    //       if (window.THREE && controls.mouseButtons) {
-    //         controls.mouseButtons = {
-    //           LEFT:   THREE.MOUSE.ROTATE,
-    //           MIDDLE: THREE.MOUSE.DOLLY,
-    //           RIGHT:  THREE.MOUSE.PAN
-    //         };
-    //       }
-    //     }
-
-    //     // disable node drag so background dragging always orbits
-    //     if (Graph3D.enableNodeDrag) Graph3D.enableNodeDrag(false);
-
-    //     Graph3D.graphData(graph);
-    //   }, 30);
-    // }
-
-
-
   function openGraphModal(graph) {
     if (!graph || !Array.isArray(graph.nodes) || graph.nodes.length === 0) {
       alert('No graph to display yet.');
@@ -152,53 +145,59 @@
     }
     modal.classList.add('open');
 
-    setTimeout(() => {
-      graph3dEl.innerHTML = '';
-
-      const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
-      const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
-
-      Graph3D = ForceGraph3D()(graph3dEl)
-        .nodeColor(n => colorFor(n.type))
-        .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
-        .linkColor(() => '#4b5563')
-        .linkOpacity(0.4);
-
-      // Orbit controls for background rotation
-      const controls = Graph3D.controls && Graph3D.controls();
-      if (controls) {
-        controls.autoRotate = false;
-        controls.enableRotate = true;
-        controls.enablePan = true;
-        controls.enableZoom = true;
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-
-        // Make sure left-drag on background rotates
-        if (window.THREE && controls.mouseButtons) {
-          controls.mouseButtons = {
-            LEFT:   THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT:  THREE.MOUSE.PAN
-          };
-        }
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (typeof ForceGraph3D === 'undefined') {
+        graph3dEl.innerHTML = '<div style="color:#f87171;padding:24px;font-size:14px;">Error: 3d-force-graph library failed to load from CDN</div>';
+        return;
       }
+      try {
+        if (!graphInited) {
+          const mc = modal.querySelector('.modal-content');
+          const W = mc.offsetWidth;
+          const H = mc.offsetHeight;
+          const TYPE_COLORS = { paper:'#3b82f6', topic:'#a855f7', author:'#f59e0b' };
+          const colorFor = t => TYPE_COLORS[String(t || '').trim().toLowerCase()] || '#9ca3af';
 
-      if (Graph3D.enableNodeDrag) Graph3D.enableNodeDrag(true);
+          Graph3D = ForceGraph3D()(graph3dEl)
+            .width(W).height(H)
+            .nodeColor(n => colorFor(n.type))
+            .nodeLabel(n => `${n.id}${n.type ? ' ('+n.type+')':''}`)
+            .linkColor(() => '#4b5563')
+            .linkOpacity(0.4);
 
-      Graph3D
-        .onNodeDrag(() => { if (Graph3D.controls) Graph3D.controls().enabled = false; })
-        .onNodeDragEnd(() => { if (Graph3D.controls) Graph3D.controls().enabled = true; });
-
-      Graph3D.graphData(graph);
-    }, 30);
+          const controls = Graph3D.controls && Graph3D.controls();
+          if (controls) {
+            controls.autoRotate = false;
+            controls.enableRotate = true;
+            controls.enablePan = true;
+            controls.enableZoom = true;
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            if (window.THREE && controls.mouseButtons) {
+              controls.mouseButtons = {
+                LEFT:   THREE.MOUSE.ROTATE,
+                MIDDLE: THREE.MOUSE.DOLLY,
+                RIGHT:  THREE.MOUSE.PAN
+              };
+            }
+          }
+          if (Graph3D.enableNodeDrag) Graph3D.enableNodeDrag(true);
+          Graph3D
+            .onNodeDrag(() => { if (Graph3D.controls) Graph3D.controls().enabled = false; })
+            .onNodeDragEnd(() => { if (Graph3D.controls) Graph3D.controls().enabled = true; });
+          graphInited = true;
+        }
+        if (Graph3D.resumeAnimation) Graph3D.resumeAnimation();
+        Graph3D.graphData(graph);
+      } catch(e) {
+        graph3dEl.innerHTML = '<div style="color:#f87171;padding:24px;font-size:14px;">Error: ' + e.message + '</div>';
+      }
+    }));
   }
-
 
     function closeGraph() {
       modal.classList.remove('open');
-      graph3dEl.innerHTML = '';
-      Graph3D = null;
+      if (Graph3D && Graph3D.pauseAnimation) Graph3D.pauseAnimation();
     }
     showBtn.addEventListener('click', () => openGraphModal(LAST_GRAPH));
     closeModal.addEventListener('click', closeGraph);
@@ -212,6 +211,7 @@
       // show Answer box + typing; reset graph cache
       answerCard.classList.remove('hidden');
       startTyping(answerEl);
+      grSourcesEl.classList.add('hidden'); grSourcesEl.innerHTML = '';
       LAST_GRAPH = null;
       showBtn.disabled = true;
 
@@ -226,7 +226,20 @@
 
         if (!res.ok) throw new Error(data.error || ('HTTP '+res.status));
 
-        answerEl.textContent = data.answer || '(no answer)';
+        renderAnswer(answerEl, data.answer);
+
+        // sources list
+        const papersArr = data.papers || [];
+        if (papersArr.length) {
+          grSourcesEl.innerHTML = '<div class="sources-label">Sources</div>' +
+            papersArr.map(p => {
+              const title = escHtml(p.title || `Paper #${p.doc_id}`);
+              return p.url
+                ? `<a class="source-link" href="${p.url}" target="_blank" rel="noopener">↗ ${title}</a>`
+                : `<span class="source-link no-url">· ${title}</span>`;
+            }).join('');
+          grSourcesEl.classList.remove('hidden');
+        }
 
         // Store graph for popup; enable button if we have nodes
         LAST_GRAPH = data.graph || null;
@@ -244,6 +257,13 @@
 
     go.addEventListener('click', run);
     q.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+
+    document.getElementById('chips').addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      q.value = chip.dataset.q;
+      run();
+    });
 
     (function setupSettingsSwitcher(){
       const toggle = document.getElementById('settings-toggle');
